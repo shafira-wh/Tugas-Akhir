@@ -4,6 +4,11 @@ import org.apache.poi.ss.usermodel.*;
 import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.Iterator;
 
 public class Main {
@@ -20,7 +25,7 @@ public class Main {
     public static Shift[] shifts;
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ParseException {
 
 
         // Read sheet1 Employee
@@ -30,55 +35,63 @@ public class Main {
             employees[e] = new Employee(
                     Integer.parseInt(read[e][0]),
                     Double.parseDouble(read[e][1]),
-                    (read[e][2]), (read[e][3]));
-
-
-            //for (int i = 0; i < employees.length; i++) {
-//            System.out.println(
-//                    employees[i].getId() + " " +
-//                            employees[i].getWorkHour() + " " +
-//                            employees[i].getWorkWeekend() + " " +
-//                            employees[i].getCompetence() + " ");
+                    (read[e][2].split(",")),
+                    (read[e][3]));
         }
+
+             for (int i = 0; i < employees.length; i++) {
+                 System.out.println(
+                         employees[i].getId() + " " +
+                                 employees[i].getWorkHour() + " " +
+                                 employees[i].getWorkWeekend()[0] + " " +
+                                 employees[i].getWorkWeekend()[1] + " " +
+                                 employees[i].getCompetence() + " ");
+
+             }
 
         //Read sheet2 Shift
         String[][] read1 = readFile1().clone();
         shifts = new Shift[read1.length];
-        for (int s = 0; s < read1.length; s++) {
-            shifts[s] = new Shift(
-                    Integer.parseInt(read1[s][0]),
-                    Double.parseDouble(read1[s][1]),
-                    Double.parseDouble(read1[s][2]),
-                    Double.parseDouble(read1[s][3]),
-                    Double.parseDouble(read1[s][4]),
-                    Double.parseDouble(read1[s][5]),
-                    Double.parseDouble(read1[s][6]),
-                    Double.parseDouble(read1[s][7]),
-                    Integer.parseInt(read1[s][8]),
-                    (read1[s][9]),
-                    Integer.parseInt(read1[s][10]),
-                    Integer.parseInt(read1[s][11]),
-                    Integer.parseInt(read1[s][12]),
-                    Integer.parseInt(read1[s][13]),
-                    (read1[s][14]));
+        DateFormat time = new SimpleDateFormat("hh mm");
+            LocalTime[][] times = new LocalTime[read1.length][2];
+            for (int t = 0; t < read1.length; t++) {
+                String startTime = read1[t][10] + " " + read1[t][11];
+                String endTime = read1[t][12] + " " + read1[t][13];
+                Time start = new Time(time.parse(startTime).getTime());
+                Time end = new Time(time.parse(endTime).getTime());
+                LocalTime startShift = start.toLocalTime();
+                LocalTime endShift = end.toLocalTime();
+                times [t][0] = startShift;
+                times [t][1] = endShift;
 
+            }
+//        for (int s = 0; s < read1.length; s++) {
+//            shifts[s] = new Shift(
+//                    Integer.parseInt(read1[s][0]),
+//                    Double.parseDouble(read1[s][1]), Double.parseDouble(read1[s][2]),
+//                    Double.parseDouble(read1[s][3]), Double.parseDouble(read1[s][4]),
+//                    Double.parseDouble(read1[s][5]), Double.parseDouble(read1[s][6]),
+//                    Double.parseDouble(read1[s][7]), Integer.parseInt(read1[s][8]),
+//                    (read1[s][9]), (times[s][0]), (times[s][1]), (read1[s][14]));
+//        }
+
+
+        for (int i = 0; i < shifts.length; i++) {
+           System.out.println(
+                    shifts[i].getIdShift() + " " +
+                            shifts[i].getMon() + " " +
+                            shifts[i].getTue() + " " +
+                            shifts[i].getWed() + " " +
+                            shifts[i].getThur() + " " +
+                            shifts[i].getFri() + " " +
+                            shifts[i].getSat() + " " +
+                            shifts[i].getSun() + " " +
+                            shifts[i].getShiftCat() + " " +
+                            shifts[i].getShiftName() + " " +
+                            shifts[i].getStartTime() +" "+
+                            shifts[i].getEndTime() + " " +
+                            shifts[i].getCompetence() + " ");
         }
-
-//        for (int i = 0; i < shifts.length; i++) {
-////            System.out.println(
-//                    shifts[i].getIdShift() + " " +
-//                            shifts[i].getMon() + " " +
-//                            shifts[i].getTue() + " " +
-//                            shifts[i].getWed() + " " +
-//                            shifts[i].getThur() + " " +
-//                            shifts[i].getFri() + " " +
-//                            shifts[i].getSat() + " " +
-//                            shifts[i].getSun() + " " +
-//                            shifts[i].getShiftCat() + " " +
-//                            shifts[i].getShiftName() + " " +
-//                            shifts[i].getCompetence() + " ");
-//
-
 
 
         //Read sheet3 Manpower
@@ -128,8 +141,7 @@ public class Main {
 //                    constraints[i].getHardC2() + " " +
 //                    constraints[i].getHardC3() + " " +
 //                    constraints[i].getHardC4() + " ");
-
-    initsol();
+        initsol();
     }
 
     // Membuat Matriks
@@ -204,8 +216,6 @@ public class Main {
         }
         return true;
     }
-
-
 
     @NotNull
     public static String[][] readFile() throws IOException {

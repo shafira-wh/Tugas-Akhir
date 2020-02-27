@@ -1,5 +1,8 @@
 package com.company;
 
+import java.time.LocalTime;
+import java.util.Locale;
+
 public class Shift {
 
     public int idShift;
@@ -12,16 +15,14 @@ public class Shift {
     public double sun;
     public int shiftCat;
     public String shiftName;
-    public int startHour;
-    public int startMin;
-    public int endHour;
-    public int endMin;
+    public LocalTime startTime;
+    public LocalTime endTime;
     public String competence;
 
 
     public Shift(int id_shift, double monday, double tuesday, double wednesday, double thursday,
                  double friday, double saturday, double sunday, int  shift_cat, String shift_name,
-                 int  start_hour, int start_min, int end_hour, int end_min, String s_competence) {
+                 LocalTime start, LocalTime end, String s_competence) {
         idShift = id_shift;
         mon = monday;
         tue = tuesday;
@@ -31,10 +32,8 @@ public class Shift {
         sat = saturday;
         sun = sunday;
         shiftCat = shift_cat;
-        startHour = start_hour;
-        startMin = start_min;
-        endHour = end_hour;
-        endMin = end_min;
+        startTime = start;
+        endTime = end;
         shiftName = shift_name;
         competence = s_competence;
     }
@@ -69,20 +68,12 @@ public class Shift {
     public String getShiftName() {
         return shiftName;
     }
-    public int getStartHour() {
-        return startHour;
+    public LocalTime getStartTime() {
+        return startTime;
     }
-
-    public int getStartMin() {
-        return startMin;
+    public LocalTime getEndTime() {
+        return endTime;
     }
-    public int getEndHour() {
-        return endHour;
-    }
-    public int getEndMin() {
-        return  endMin;
-    }
-
     public String getCompetence(){
         return  competence;
     }
