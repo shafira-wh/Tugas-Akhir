@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.Iterator;
 
 public class Main {
@@ -23,20 +24,21 @@ public class Main {
     public static Manpower[] manpowers;
     public static Employee[] employees;
     public static Shift[] shifts;
+    public static Constraint[] constraints;
 
 
     public static void main(String[] args) throws IOException, ParseException {
 
 
         // Read sheet1 Employee (Int)
-        String [][] read = readFile().clone();
+        String[][] read = readFile().clone();
         employees = new Employee[read.length];
 
-        String [][] workWeekend = new String[read.length][];
+        String[][] workWeekend = new String[read.length][];
         for (int w = 0; w < read.length; w++)
-           workWeekend [w] = read[w][2].split(",");
+            workWeekend[w] = read[w][2].split(",");
         int a = 0;
-        for (int i=0; i<workWeekend.length;i++){
+        for (int i = 0; i < workWeekend.length; i++) {
             if (a < workWeekend[i].length)
                 a = workWeekend[i].length;
         }
@@ -47,8 +49,8 @@ public class Main {
                 weekend[i][j] = Integer.parseInt(workWeekend[i][j]);
             }
         }
-            for (int e=0; e<read.length;e++){
-                employees[e] = new Employee(
+        for (int e = 0; e < read.length; e++) {
+            employees[e] = new Employee(
                     Integer.parseInt(read[e][0]),
                     Double.parseDouble(read[e][1]),
                     (weekend[e]),
@@ -77,8 +79,8 @@ public class Main {
             Time end = new Time(time.parse(endTime).getTime());
             LocalTime startShift = start.toLocalTime();
             LocalTime endShift = end.toLocalTime();
-            times [t][0] = startShift;
-            times [t][1] = endShift;
+            times[t][0] = startShift;
+            times[t][1] = endShift;
 
         }
         for (int s = 0; s < read1.length; s++) {
@@ -140,25 +142,40 @@ public class Main {
 //                            manpowers[i].getIdMan() + " ");
 
 
-// Read sheet4 Constraint (tipe String)
-//        String[][] read3 = readFile3().clone();
-//        Constraint[] constraints = new Constraint[read3.length];
-//        for (int c = 0; c < read3.length; c++) {
-//            constraints[c] = new Constraint(
-//                    (read3[c][0]),
-//                    (read3[c][1]),
-//                    (read3[c][2]),
-//                    (read3[c][3]));
-//
-//        }
-//
-//        for (int i = 0; i < constraints.length; i++) {
-//            System.out.println(constraints[i].getHardC1() + " " +
-//                    constraints[i].getHardC2() + " " +
-//                    constraints[i].getHardC3() + " " +
-//                    constraints[i].getHardC4() + " ");
-        initsol();
+        // Read sheet4 Constraint
+        String [] read3 = readFile3().clone();
+        Constraint constraints = new Constraint(read3);
+        constraints.setHc1();
+        constraints.setHc2();
+        constraints.setHc3();
+        constraints.setHc4();
+        constraints.setHc5_1();
+        constraints.setHc5_2();
+        constraints.setHc5_3();
+        constraints.setHc5_4();
+        constraints.setHc5_5();
+        constraints.setHc5_6();
+        constraints.setHc6();
+        constraints.setHc7();
+
+//        System.out.println (Arrays.toString(read3));
+        System.out.println(constraints.getHc1());
+        System.out.println(constraints.getHc2());
+        System.out.println(constraints.getHc3());
+        System.out.println(constraints.getHc4());
+        System.out.println(constraints.getHc5_1());
+        System.out.println(constraints.getHc5_2());
+        System.out.println(constraints.getHc5_3());
+        System.out.println(constraints.getHc5_4());
+        System.out.println(constraints.getHc5_5());
+        System.out.println(constraints.getHc5_6());
+        System.out.println(constraints.getHc6());
+        System.out.println(constraints.getHc7());
+
+        // initsol();
+
     }
+
 
     // Membuat Matriks
     public static void initsol() {
@@ -169,9 +186,12 @@ public class Main {
                     //Mengecek HC
                     if (checkHC2(isiEmp, i, a, j)) {
                         if (checkHC4Com(a, j)) {
-                            if (checkHC4Weekend(i,j))
-                            isiEmp[j][i] = a + 1;
-                            break;
+                            if (checkHC4Weekend(i, j)) {
+                                if (checkHC7(isiEmp, i, a, j)) {
+                                    isiEmp[j][i] = a + 1;
+                                    break;
+                                }
+                            }
                         }
                     }
 
@@ -180,12 +200,12 @@ public class Main {
 
             }
         }
-        for (int i = 0; i < isiEmp.length; i++) {
-            for (int j = 0; j < isiEmp[i].length; j++) {
-                System.out.print(isiEmp[i][j] + " ");
-            }
-            System.out.println("");
-        }
+//        for (int i = 0; i < isiEmp.length; i++) {
+////            for (int j = 0; j < isiEmp[i].length; j++) {
+////                System.out.print(isiEmp[i][j] + " ");
+////            }
+////            System.out.println("");
+////        }
     }
 
 
@@ -207,23 +227,18 @@ public class Main {
                 return true;
         if (day % 7 == 2)
             if (needs(solution, shift, day) < manpowers[shift].getManWed())
-                //if(checkHC4Com(shift, employee))
                 return true;
         if (day % 7 == 3)
             if (needs(solution, shift, day) < manpowers[shift].getManThur())
-                //if(checkHC4Com(shift, employee))
                 return true;
         if (day % 7 == 4)
             if (needs(solution, shift, day) < manpowers[shift].getManFri())
-                //if(checkHC4Com(shift, employee))
                 return true;
         if (day % 7 == 5)
             if (needs(solution, shift, day) < manpowers[shift].getManSat())
-                //if(checkHC4Com(shift, employee))
                 return true;
         if (day % 7 == 6)
             if (needs(solution, shift, day) < manpowers[shift].getManSun())
-                //if(checkHC4Com(shift, employee))
                 return true;
         return false;
     }
@@ -234,15 +249,71 @@ public class Main {
         }
         return true;
     }
-    public static boolean checkHC4Weekend ( int day, int employee) {
-        if (day % 7 == 5 || day % 7 == 6 ){
-            for (int i = 0 ; i < employees[employee].getWorkWeekend().length; i ++) {
-                if (day/7==employees[employee].getWorkWeekend()[i]-1)
+
+    public static boolean checkHC4Weekend(int day, int employee) {
+        if (day % 7 == 5 || day % 7 == 6) {
+            for (int i = 0; i < employees[employee].getWorkWeekend().length; i++) {
+                if (day / 7 == employees[employee].getWorkWeekend()[i] - 1)
                     return true;
             }
-            return  false;
+            return false;
         }
         return true;
+    }
+
+    //    public static boolean checkHC5 (){
+//        int count = 0;
+//        for (int i=0; i < shifts.length; i++){
+//            for (int j = 0; j < shifts.length; j++) {
+//                if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 2)
+//
+//            }
+//        }
+//}
+    public static boolean checkHC7(int[][] solution, int day, int shift, int employee) {
+        double sumTotal = 0;
+        int week = day / 7;
+        for (int i = week * 7; i < (week + 1) * 7; i++) {
+            if (solution[employee][i] != 0) {
+                if (i % 7 == 0) {
+                    sumTotal += shifts[solution[employee][i] - 1].getMon();
+                }
+                if (i % 7 == 1) {
+                    sumTotal += shifts[solution[employee][i] - 1].getTue();
+                }
+                if (i % 7 == 2) {
+                    sumTotal += shifts[solution[employee][i] - 1].getWed();
+                }
+                if (i % 7 == 3) {
+                    sumTotal += shifts[solution[employee][i] - 1].getThur();
+                }
+                if (i % 7 == 4) {
+                    sumTotal += shifts[solution[employee][i] - 1].getFri();
+                }
+                if (i % 7 == 5) {
+                    sumTotal += shifts[solution[employee][i] - 1].getSat();
+                }
+                if (i % 7 == 6) {
+                    sumTotal += shifts[solution[employee][i]].getSun();
+                }
+            }
+            if (sumTotal + shifts[shift].getMon() <= 48)
+                return true;
+            if (sumTotal + shifts[shift].getTue() <= 48)
+                return true;
+            if (sumTotal + shifts[shift].getWed() <= 48)
+                return true;
+            if (sumTotal + shifts[shift].getThur() <= 48)
+                return true;
+            if (sumTotal + shifts[shift].getFri() <= 48)
+                return true;
+            if (sumTotal + shifts[shift].getSat() <= 48)
+                return true;
+            if (sumTotal + shifts[shift].getSun() <= 48)
+                return true;
+        }
+
+        return false;
     }
 
 
@@ -288,6 +359,7 @@ public class Main {
         }
         return iniarray;
     }
+
     @NotNull
 
     public static String[][] readFile1() throws IOException {
@@ -302,7 +374,7 @@ public class Main {
         int mendatarfix = 0;
         for (int i = 4; i <= sheet.getLastRowNum(); i++) {
             row = sheet.getRow(i);
-            Iterator <Cell> cellIterator = row.cellIterator();
+            Iterator<Cell> cellIterator = row.cellIterator();
 
             while (cellIterator.hasNext()) {
                 Cell cell = cellIterator.next();
@@ -332,6 +404,7 @@ public class Main {
         }
         return iniarray;
     }
+
     @NotNull
     public static String[][] readFile2() throws IOException {
         Workbook workbook = WorkbookFactory.create(new File(file));
@@ -372,11 +445,11 @@ public class Main {
             mendatar = 0;
             menurun++;
         }
+
         return iniarray;
     }
 
-    @NotNull
-    public static String[][] readFile3() throws IOException {
+    public static String [] readFile3() throws IOException {
         Workbook workbook = WorkbookFactory.create(new File(file));
         Sheet sheet = workbook.getSheetAt(3);
         DataFormatter dataFormat = new DataFormatter();
@@ -399,22 +472,21 @@ public class Main {
                 mendatarfix = mendatar;
             mendatar = 0;
             menurun++;
-
         }
-
-        String[][] iniarray = new String[menurun][100];
+        String [] iniarray = new String[menurun];
         menurun = 0;
         for (int i = 4; i <= sheet.getLastRowNum(); i++) {
             row = sheet.getRow(i);
             for (Cell cell : row) {
-
                 String cellValue = dataFormat.formatCellValue(cell);
-                iniarray[menurun][mendatar] = cellValue;
+                iniarray[menurun] = cellValue;
                 mendatar++;
             }
             mendatar = 0;
             menurun++;
-        }
+                    }
+//        System.out.print(iniarray.length);
+//        System.out.println(mendatarfix);
         return iniarray;
     }
 
