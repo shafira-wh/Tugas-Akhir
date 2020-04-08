@@ -24,7 +24,9 @@ public class Main {
     public static Manpower[] manpowers;
     public static Employee[] employees;
     public static Shift[] shifts;
-    public static Constraint[] constraints;
+    public static Constraint constraints;
+    public static int  [][] shiftWdays;
+    public static int [][] shiftWend;
 
 
     public static void main(String[] args) throws IOException, ParseException {
@@ -143,7 +145,7 @@ public class Main {
 
 
         // Read sheet4 Constraint
-        String [] read3 = readFile3().clone();
+        String[] read3 = readFile3().clone();
         Constraint constraints = new Constraint(read3);
         constraints.setHc1();
         constraints.setHc2();
@@ -159,53 +161,151 @@ public class Main {
         constraints.setHc7();
 
 //        System.out.println (Arrays.toString(read3));
-        System.out.println(constraints.getHc1());
-        System.out.println(constraints.getHc2());
-        System.out.println(constraints.getHc3());
-        System.out.println(constraints.getHc4());
-        System.out.println(constraints.getHc5_1());
-        System.out.println(constraints.getHc5_2());
-        System.out.println(constraints.getHc5_3());
-        System.out.println(constraints.getHc5_4());
-        System.out.println(constraints.getHc5_5());
-        System.out.println(constraints.getHc5_6());
-        System.out.println(constraints.getHc6());
-        System.out.println(constraints.getHc7());
+//        System.out.println(constraints.getHc1());
+//        System.out.println(constraints.getHc2());
+//        System.out.println(constraints.getHc3());
+//        System.out.println(constraints.getHc4());
+//        System.out.println(constraints.getHc5_1());
+//        System.out.println(constraints.getHc5_2());
+//        System.out.println(constraints.getHc5_3());
+//        System.out.println(constraints.getHc5_4());
+//        System.out.println(constraints.getHc5_5());
+//        System.out.println(constraints.getHc5_6());
+//        System.out.println(constraints.getHc6());
+//        System.out.println(constraints.getHc7());
 
-        // initsol();
+        int count = 0;
+        for (int i = 0; i < shifts.length; i++) {
+            for (int j = 0; j < shifts.length; j++) {
+                if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 2) {
+                    if (constraints.getHc5_1().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0)
+                        count++;
+                }
+                if (shifts[i].getShiftCat() == 2 && shifts[j].getShiftCat() == 1) {
+                    if (constraints.getHc5_3().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0)
+                        count++;
+                }
+                if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 1) {
+                    if (constraints.getHc5_6().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0)
+                        count++;
+                }
+            }
+        }
+        int [][] shiftWday = new int[count][2];
+        count = 0;
+        for (int i = 0; i < shifts.length; i++) {
+            for (int j = 0; j < shifts.length; j++) {
+                if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 2) {
+                    if (constraints.getHc5_1().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0) {
+                        shiftWday[count][0] = i + 1;
+                        shiftWday[count][0] = j + 1;
+                        count++;
+                    }
+                }
+                if (shifts[i].getShiftCat() == 2 && shifts[j].getShiftCat() == 1) {
+                    if (constraints.getHc5_3().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0) {
+                        shiftWday[count][0] = i + 1;
+                        shiftWday[count][0] = j + 1;
+                        count++;
+                    }
+                }
+                if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 1) {
+                    if (constraints.getHc5_5().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0) {
+                        shiftWday[count][0] = i + 1;
+                        shiftWday[count][0] = j + 1;
+                        count++;
+                    }
+                }
 
+            }
+
+        }
+
+        count = 0;
+        int [][] shiftWend  = new int [count] [2];
+        for (int i = 0; i < shifts.length; i++) {
+            for (int j = 0; j < shifts.length; j++) {
+                if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 2) {
+                    if (constraints.getHc5_2().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0) {
+                        shiftWend[count][0] = i + 1;
+                        shiftWend[count][0] = j + 1;
+                        count++;
+                    }
+                }
+                if (shifts[i].getShiftCat() == 2 && shifts[j].getShiftCat() == 1) {
+                    if (constraints.getHc5_4().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0) {
+                        shiftWday[count][0] = i + 1;
+                        shiftWday[count][0] = j + 1;
+                        count++;
+                    }
+                }
+                if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 1) {
+                    if (constraints.getHc5_6().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0) {
+                        shiftWend[count][0] = i + 1;
+                        shiftWend[count][0] = j + 1;
+                        count++;
+                    }
+                }
+
+            }
+
+        }
+        initsol();
     }
 
 
     // Membuat Matriks
     public static void initsol() {
-        int[][] isiEmp = new int[15][42];
+        int[][] soltmatrix = new int[15][42];
+
+        // Assign Jadwal Weekend (5-6)
         for (int i = 0; i < 42; i++) {
+            if (i % 7 == 5 || i % 7 == 6){
             for (int j = 0; j < 15; j++) {
                 for (int a = 0; a < 6; a++) {
                     //Mengecek HC
-                    if (checkHC2(isiEmp, i, a, j)) {
+                    if (checkHC2(soltmatrix, i, a, j)) {
                         if (checkHC4Com(a, j)) {
                             if (checkHC4Weekend(i, j)) {
-                                if (checkHC7(isiEmp, i, a, j)) {
-                                    isiEmp[j][i] = a + 1;
-                                    break;
+                               // if (checkHC7(soltmatrix, i, a, j)) {
+                                   // if (checkHC5(soltmatrix, i, a, j)) {
+                                        soltmatrix[j][i] = a + 1;
+                                        break;
+                                    }
                                 }
                             }
                         }
                     }
-
-
                 }
+            }
+//        }
+        // Assign Jadwal Weekdays (0-4)
+        for (int i = 0; i < 42; i++) {
+            for (int j = 0; j < 15; j++) {
+                for (int a = 0; a < 6; a++) {
+                    // Mengecek HC
+                    if (checkHC2(soltmatrix, i, a, j)) {
+                        if (checkHC4Com(a, j)) {
+                            if (checkHC4Weekend(i, j)) {
+                                if (checkHC7(soltmatrix, i, a, j)) {
+                              //  if (checkHC5(soltmatrix, i, a, j)) {
+                                    soltmatrix[j][i] = a + 1;
+                                    break;
+                                }
 
+                            }
+                        }
+                    }
+                }
             }
         }
-//        for (int i = 0; i < isiEmp.length; i++) {
-////            for (int j = 0; j < isiEmp[i].length; j++) {
-////                System.out.print(isiEmp[i][j] + " ");
-////            }
-////            System.out.println("");
-////        }
+
+        for (int i = 0; i < soltmatrix.length; i++) {
+            for (int j = 0; j < soltmatrix[i].length; j++) {
+                System.out.print(soltmatrix[i][j] + " ");
+            }
+            System.out.println("");
+        }
     }
 
 
@@ -261,15 +361,39 @@ public class Main {
         return true;
     }
 
-    //    public static boolean checkHC5 (){
-//        int count = 0;
-//        for (int i=0; i < shifts.length; i++){
-//            for (int j = 0; j < shifts.length; j++) {
-//                if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 2)
-//
-//            }
-//        }
-//}
+        public static boolean checkHC5 (int [][] solution, int day, int shift, int employee) {
+        if (day == 0)
+            return true;
+
+            if (day % 7 == 5 || day % 7 == 6) {
+                for (int i = 0; i < shiftWend.length; i++){
+                    if (solution[employee][day-1] == shiftWend[i][0] && shift == shiftWend [i][1]){
+                        return false;
+                    }
+                    if (day < 42) {
+                        if (solution [employee][day+1]== shiftWend[i][1] && shift == shiftWend[i][0])
+                            return false;
+                    }
+                }
+
+            }
+            if (day % 7 == 0 || day % 7 == 1 || day % 7 == 2 || day % 7 == 3 || day % 7 == 4){
+                for (int i = 0; i < shiftWdays.length; i++){
+                    if (solution[employee][day-1] == shiftWdays[i][0] && shift == shiftWdays [i][1]){
+                        return false;
+                    }
+                    if (day < 42) {
+                        if (solution [employee][day+1]== shiftWdays[i][1] && shift == shiftWdays[i][0])
+                            return false;
+                    }
+                }
+
+            }
+
+        return true;
+    }
+
+
     public static boolean checkHC7(int[][] solution, int day, int shift, int employee) {
         double sumTotal = 0;
         int week = day / 7;

@@ -78,23 +78,22 @@ public class Constraint {
         String time = consValue[4] + ":00";
         hc5_1 = LocalTime.parse(time);
     }
-
     public LocalTime getHc5_1() {
         return hc5_1;
     }
+
     public void  setHc5_2()  {
         String time = consValue[5] + ":00";
         hc5_2 = LocalTime.parse(time);
     }
-
     public LocalTime getHc5_2() {
         return hc5_2;
     }
+
     public void  setHc5_3()  {
         String time = consValue[6] + ":00";
         hc5_3 = LocalTime.parse(time);
     }
-
     public LocalTime getHc5_3() {
         return hc5_3;
     }
@@ -102,15 +101,14 @@ public class Constraint {
         String time = consValue[7] + ":00";
         hc5_4 = LocalTime.parse(time);
     }
-
     public LocalTime getHc5_4() {
         return hc5_4;
     }
+
     public void  setHc5_5()  {
         String time = consValue[8] + ":00";
         hc5_5 = LocalTime.parse(time);
     }
-
     public LocalTime getHc5_5() {
         return hc5_5;
     }
@@ -118,7 +116,6 @@ public class Constraint {
         String time = consValue[9] + ":00";
         hc5_6 = LocalTime.parse(time);
     }
-
     public LocalTime getHc5_6() {
         return hc5_6;
     }
