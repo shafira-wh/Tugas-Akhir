@@ -263,25 +263,26 @@ public class Main {
 
         // Assign Jadwal Weekend (5-6)
         for (int i = 0; i < 42; i++) {
-            if (i % 7 == 5 || i % 7 == 6){
-            for (int j = 0; j < 15; j++) {
-                for (int a = 0; a < 6; a++) {
-                    //Mengecek HC
-                    if (checkHC2(soltmatrix, i, a, j)) {
-                        if (checkHC4Com(a, j)) {
-                            if (checkHC4Weekend(i, j)) {
-                                // if (checkHC7(soltmatrix, i, a, j)) {
-                                if (checkHC5(soltmatrix, i, a, j)) {
-                                    soltmatrix[j][i] = a + 1;
-                                    break;
+            if (i % 7 == 5 || i % 7 == 6) {
+                for (int j = 0; j < 15; j++) {
+                    for (int a = 0; a < 6; a++) {
+                        //Mengecek HC
+                        if (checkHC2(soltmatrix, i, a, j)) {
+                            if (checkHC4Com(a, j)) {
+                                if (checkHC4Weekend(i, j)) {
+                                    if (checkHC7(soltmatrix, i, a, j)) {
+                                        if (checkHC5(soltmatrix, i, a, j)) {
+                                            soltmatrix[j][i] = a + 1;
+                                            break;
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
-            }
-                }
+        }
         // Assign Jadwal Weekdays (0-4)
         for (int i = 0; i < 42; i++) {
             for (int j = 0; j < 15; j++) {
@@ -374,7 +375,7 @@ public class Main {
                     if (solution[employee][day-1] == shiftWend[i][0] && shift == shiftWend [i][1]){
                         return false;
                     }
-                    if (day < 42) {
+                    if (day < 41) {
                         if (solution [employee][day+1]== shiftWend[i][1] && shift == shiftWend[i][0])
                             return false;
                     }
@@ -386,7 +387,7 @@ public class Main {
                     if (solution[employee][day-1] == shiftWday[i][0] && shift == shiftWday [i][1]){
                         return false;
                     }
-                    if (day < 42) {
+                    if (day < 41) {
                         if (solution [employee][day+1]== shiftWday[i][1] && shift == shiftWday[i][0])
                             return false;
                     }
