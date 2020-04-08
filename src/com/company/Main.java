@@ -25,7 +25,7 @@ public class Main {
     public static Employee[] employees;
     public static Shift[] shifts;
     public static Constraint constraints;
-    public static int  [][] shiftWdays;
+    public static int  [][] shiftWday;
     public static int [][] shiftWend;
 
 
@@ -191,7 +191,8 @@ public class Main {
                 }
             }
         }
-        int [][] shiftWday = new int[count][2];
+
+        shiftWday = new int[count][2];
         count = 0;
         for (int i = 0; i < shifts.length; i++) {
             for (int j = 0; j < shifts.length; j++) {
@@ -221,8 +222,8 @@ public class Main {
 
         }
 
+       shiftWend  = new int [count] [2];
         count = 0;
-        int [][] shiftWend  = new int [count] [2];
         for (int i = 0; i < shifts.length; i++) {
             for (int j = 0; j < shifts.length; j++) {
                 if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 2) {
@@ -250,6 +251,8 @@ public class Main {
             }
 
         }
+       // System.out.println(Arrays.toString(shiftWday));
+       // System.out.println(shiftWend);
         initsol();
     }
 
@@ -267,18 +270,18 @@ public class Main {
                     if (checkHC2(soltmatrix, i, a, j)) {
                         if (checkHC4Com(a, j)) {
                             if (checkHC4Weekend(i, j)) {
-                               // if (checkHC7(soltmatrix, i, a, j)) {
-                                   // if (checkHC5(soltmatrix, i, a, j)) {
-                                        soltmatrix[j][i] = a + 1;
-                                        break;
-                                    }
+                                // if (checkHC7(soltmatrix, i, a, j)) {
+                                if (checkHC5(soltmatrix, i, a, j)) {
+                                    soltmatrix[j][i] = a + 1;
+                                    break;
                                 }
                             }
                         }
                     }
                 }
             }
-//        }
+            }
+                }
         // Assign Jadwal Weekdays (0-4)
         for (int i = 0; i < 42; i++) {
             for (int j = 0; j < 15; j++) {
@@ -288,11 +291,12 @@ public class Main {
                         if (checkHC4Com(a, j)) {
                             if (checkHC4Weekend(i, j)) {
                                 if (checkHC7(soltmatrix, i, a, j)) {
-                              //  if (checkHC5(soltmatrix, i, a, j)) {
-                                    soltmatrix[j][i] = a + 1;
-                                    break;
-                                }
+                                    if (checkHC5(soltmatrix, i, a, j)) {
+                                        soltmatrix[j][i] = a + 1;
+                                        break;
+                                    }
 
+                                }
                             }
                         }
                     }
@@ -378,12 +382,12 @@ public class Main {
 
             }
             if (day % 7 == 0 || day % 7 == 1 || day % 7 == 2 || day % 7 == 3 || day % 7 == 4){
-                for (int i = 0; i < shiftWdays.length; i++){
-                    if (solution[employee][day-1] == shiftWdays[i][0] && shift == shiftWdays [i][1]){
+                for (int i = 0; i < shiftWday.length; i++){
+                    if (solution[employee][day-1] == shiftWday[i][0] && shift == shiftWday [i][1]){
                         return false;
                     }
                     if (day < 42) {
-                        if (solution [employee][day+1]== shiftWdays[i][1] && shift == shiftWdays[i][0])
+                        if (solution [employee][day+1]== shiftWday[i][1] && shift == shiftWday[i][0])
                             return false;
                     }
                 }
