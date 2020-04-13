@@ -174,87 +174,115 @@ public class Main {
 //        System.out.println(constraints.getHc6());
 //        System.out.println(constraints.getHc7());
 
+
+// Pasangan Shift yang tidak boleh pada Weekday
         int count = 0;
-        for (int i = 0; i < shifts.length; i++) {
+        for (int i = 0; i < shifts.length; i++)
             for (int j = 0; j < shifts.length; j++) {
-                if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 2) {
+                if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 2)
                     if (constraints.getHc5_1().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0)
                         count++;
-                }
-                if (shifts[i].getShiftCat() == 2 && shifts[j].getShiftCat() == 1) {
+
+                if (shifts[i].getShiftCat() == 2 && shifts[j].getShiftCat() == 1)
                     if (constraints.getHc5_3().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0)
                         count++;
-                }
-                if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 1) {
-                    if (constraints.getHc5_6().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0)
-                        count++;
-                }
+
+                if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 1)
+                    //  if (constraints.getHc5_5().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0)
+                    count++;
+
             }
-        }
-// Pasangan Shift yang tidak boleh pada Weekday
         shiftWday = new int[count][2];
         count = 0;
-        for (int i = 0; i < shifts.length; i++) {
+        for (int i = 0; i < shifts.length; i++)
             for (int j = 0; j < shifts.length; j++) {
-                if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 2) {
+                if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 2)
                     if (constraints.getHc5_1().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0) {
                         shiftWday[count][0] = i + 1;
-                        shiftWday[count][0] = j + 1;
+                        shiftWday[count][1] = j + 1;
                         count++;
                     }
-                }
-                if (shifts[i].getShiftCat() == 2 && shifts[j].getShiftCat() == 1) {
+
+                if (shifts[i].getShiftCat() == 2 && shifts[j].getShiftCat() == 1)
                     if (constraints.getHc5_3().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0) {
                         shiftWday[count][0] = i + 1;
-                        shiftWday[count][0] = j + 1;
+                        shiftWday[count][1] = j + 1;
                         count++;
                     }
-                }
-                if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 1) {
+
+                if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 1)
                     if (constraints.getHc5_5().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0) {
                         shiftWday[count][0] = i + 1;
-                        shiftWday[count][0] = j + 1;
+                        shiftWday[count][1] = j + 1;
                         count++;
                     }
-                }
+            }
+
+
+// Pasangan Shift yang tidak boleh pada Weekend
+        count = 0;
+        for (int i = 0; i < shifts.length; i++)
+            for (int j = 0; j < shifts.length; j++) {
+                if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 2)
+                    if (constraints.getHc5_2().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0)
+                        count++;
+
+                if (shifts[i].getShiftCat() == 2 && shifts[j].getShiftCat() == 1)
+                    if (constraints.getHc5_4().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0)
+                        count++;
+
+                if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 1)
+                    //  if (constraints.getHc5_6().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0)
+                    count++;
 
             }
 
-        }
-// Pasangan Shift yang tidak boleh pada Weekend
-       shiftWend  = new int [count] [2];
+        shiftWend = new int[count][2];
         count = 0;
-        for (int i = 0; i < shifts.length; i++) {
+        for (int i = 0; i < shifts.length; i++)
             for (int j = 0; j < shifts.length; j++) {
                 if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 2) {
                     if (constraints.getHc5_2().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0) {
                         shiftWend[count][0] = i + 1;
-                        shiftWend[count][0] = j + 1;
+                        shiftWend[count][1] = j + 1;
                         count++;
                     }
                 }
                 if (shifts[i].getShiftCat() == 2 && shifts[j].getShiftCat() == 1) {
                     if (constraints.getHc5_4().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0) {
-                        shiftWday[count][0] = i + 1;
-                        shiftWday[count][0] = j + 1;
+                        shiftWend[count][0] = i + 1;
+                        shiftWend[count][1] = j + 1;
                         count++;
                     }
                 }
                 if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 1) {
                     if (constraints.getHc5_6().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0) {
                         shiftWend[count][0] = i + 1;
-                        shiftWend[count][0] = j + 1;
+                        shiftWend[count][1] = j + 1;
                         count++;
                     }
                 }
 
             }
 
+
+        System.out.println("Pasangan shift tidak boleh Weekend");
+        for (int i = 0; i < shiftWend.length; i++) {
+            System.out.println(Arrays.toString(shiftWend[i]));
         }
 
-              // System.out.println(shiftWend);
-        initsol();
+        System.out.println("Pasangan shift tidak boleh Weekdays");
+        for (int i = 0; i < shiftWday.length; i++) {
+            System.out.println(Arrays.toString(shiftWday[i]));
+
+        }
     }
+
+
+
+
+       // initsol();
+
 
 
     // Membuat Matriks
@@ -284,27 +312,27 @@ public class Main {
             }
         }
         // Assign Jadwal Weekdays (0-4)
-        for (int i = 0; i < 42; i++) {
-//            if (i % 7 == 0 || i % 7 == 1 || i % 7 == 2 || i % 7 == 3 || i % 7 == 4) {
-                for (int j = 0; j < 15; j++) {
-                    for (int a = 0; a < 6; a++) {
-                        // Mengecek HC
-                        if (checkHC2(soltmatrix, i, a, j)) {
-                            if (checkHC4Com(a, j)) {
-                                if (checkHC4Weekend(i, j)) {
-                                    if (checkHC7(soltmatrix, i, a, j)) {
-                                      //  if (checkHC5(soltmatrix, i, a, j)) {
-                                            soltmatrix[j][i] = a + 1;
-                                            break;
-                                        }
-
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-           // }
+//        for (int i = 0; i < 42; i++) {
+//         if (i % 7 == 0 || i % 7 == 1 || i % 7 == 2 || i % 7 == 3 || i % 7 == 4) {
+//                for (int j = 0; j < 15; j++) {
+//                    for (int a = 0; a < 6; a++) {
+//                        // Mengecek HC
+//                        if (checkHC2(soltmatrix, i, a, j)) {
+//                            if (checkHC4Com(a, j)) {
+//                                if (checkHC4Weekend(i, j)) {
+//                                    if (checkHC7(soltmatrix, i, a, j)) {
+//                                      //  if (checkHC5(soltmatrix, i, a, j)) {
+//                                            soltmatrix[j][i] = a + 1;
+//                                            break;
+//                                        }
+//
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
 
 
         for (int i = 0; i < soltmatrix.length; i++) {
