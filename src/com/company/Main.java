@@ -191,7 +191,7 @@ public class Main {
                 }
             }
         }
-
+// Pasangan Shift yang tidak boleh pada Weekday
         shiftWday = new int[count][2];
         count = 0;
         for (int i = 0; i < shifts.length; i++) {
@@ -221,7 +221,7 @@ public class Main {
             }
 
         }
-
+// Pasangan Shift yang tidak boleh pada Weekend
        shiftWend  = new int [count] [2];
         count = 0;
         for (int i = 0; i < shifts.length; i++) {
@@ -251,8 +251,8 @@ public class Main {
             }
 
         }
-       // System.out.println(Arrays.toString(shiftWday));
-       // System.out.println(shiftWend);
+
+              // System.out.println(shiftWend);
         initsol();
     }
 
@@ -270,14 +270,14 @@ public class Main {
                         if (checkHC2(soltmatrix, i, a, j)) {
                             if (checkHC4Com(a, j)) {
                                 if (checkHC4Weekend(i, j)) {
-                                    if (checkHC7(soltmatrix, i, a, j)) {
+                                   if (checkHC7(soltmatrix, i, a, j)) {
                                         if (checkHC5(soltmatrix, i, a, j)) {
-                                            soltmatrix[j][i] = a + 1;
+                                            soltmatrix[j][i] = a+1;
                                             break;
                                         }
                                     }
-                                }
-                            }
+                               }
+                           }
                         }
                     }
                 }
@@ -285,25 +285,27 @@ public class Main {
         }
         // Assign Jadwal Weekdays (0-4)
         for (int i = 0; i < 42; i++) {
-            for (int j = 0; j < 15; j++) {
-                for (int a = 0; a < 6; a++) {
-                    // Mengecek HC
-                    if (checkHC2(soltmatrix, i, a, j)) {
-                        if (checkHC4Com(a, j)) {
-                            if (checkHC4Weekend(i, j)) {
-                                if (checkHC7(soltmatrix, i, a, j)) {
-                                    if (checkHC5(soltmatrix, i, a, j)) {
-                                        soltmatrix[j][i] = a + 1;
-                                        break;
-                                    }
+//            if (i % 7 == 0 || i % 7 == 1 || i % 7 == 2 || i % 7 == 3 || i % 7 == 4) {
+                for (int j = 0; j < 15; j++) {
+                    for (int a = 0; a < 6; a++) {
+                        // Mengecek HC
+                        if (checkHC2(soltmatrix, i, a, j)) {
+                            if (checkHC4Com(a, j)) {
+                                if (checkHC4Weekend(i, j)) {
+                                    if (checkHC7(soltmatrix, i, a, j)) {
+                                      //  if (checkHC5(soltmatrix, i, a, j)) {
+                                            soltmatrix[j][i] = a + 1;
+                                            break;
+                                        }
 
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
-        }
+           // }
+
 
         for (int i = 0; i < soltmatrix.length; i++) {
             for (int j = 0; j < soltmatrix[i].length; j++) {
