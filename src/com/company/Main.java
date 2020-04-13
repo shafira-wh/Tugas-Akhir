@@ -96,7 +96,7 @@ public class Main {
         }
 
 
-//        for (int i = 0; i < shifts.length; i++) {
+        for (int i = 0; i < shifts.length; i++) {
 //            System.out.println(
 //                    shifts[i].getIdShift() + " " +
 //                            shifts[i].getMon() + " " +
@@ -109,9 +109,9 @@ public class Main {
 //                            shifts[i].getShiftCat() + " " +
 //                            shifts[i].getShiftName() + " " +
 //                            shifts[i].getStartTime() +" "+
-//                            shifts[i].getEndTime() + " " +
+//                            shifts[i].getEndTime()  + " "+
 //                            shifts[i].getCompetence() + " ");
-//        }
+        }
 
 
         //Read sheet3 Manpower
@@ -182,15 +182,12 @@ public class Main {
                 if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 2)
                     if (constraints.getHc5_1().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0)
                         count++;
-
                 if (shifts[i].getShiftCat() == 2 && shifts[j].getShiftCat() == 1)
                     if (constraints.getHc5_3().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0)
                         count++;
-
                 if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 1)
-                    //  if (constraints.getHc5_5().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0)
-                    count++;
-
+                    if (constraints.getHc5_5().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0)
+                        count++;
             }
         shiftWday = new int[count][2];
         count = 0;
@@ -202,14 +199,12 @@ public class Main {
                         shiftWday[count][1] = j + 1;
                         count++;
                     }
-
                 if (shifts[i].getShiftCat() == 2 && shifts[j].getShiftCat() == 1)
                     if (constraints.getHc5_3().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0) {
                         shiftWday[count][0] = i + 1;
                         shiftWday[count][1] = j + 1;
                         count++;
                     }
-
                 if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 1)
                     if (constraints.getHc5_5().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0) {
                         shiftWday[count][0] = i + 1;
@@ -217,8 +212,6 @@ public class Main {
                         count++;
                     }
             }
-
-
 // Pasangan Shift yang tidak boleh pada Weekend
         count = 0;
         for (int i = 0; i < shifts.length; i++)
@@ -234,38 +227,33 @@ public class Main {
                 if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 1)
                     //  if (constraints.getHc5_6().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0)
                     count++;
-
-            }
+                            }
 
         shiftWend = new int[count][2];
         count = 0;
         for (int i = 0; i < shifts.length; i++)
             for (int j = 0; j < shifts.length; j++) {
-                if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 2) {
+                if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 2)
                     if (constraints.getHc5_2().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0) {
                         shiftWend[count][0] = i + 1;
                         shiftWend[count][1] = j + 1;
                         count++;
                     }
-                }
-                if (shifts[i].getShiftCat() == 2 && shifts[j].getShiftCat() == 1) {
+
+                if (shifts[i].getShiftCat() == 2 && shifts[j].getShiftCat() == 1)
                     if (constraints.getHc5_4().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0) {
                         shiftWend[count][0] = i + 1;
                         shiftWend[count][1] = j + 1;
                         count++;
                     }
-                }
-                if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 1) {
+
+                if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 1)
                     if (constraints.getHc5_6().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0) {
                         shiftWend[count][0] = i + 1;
                         shiftWend[count][1] = j + 1;
                         count++;
                     }
                 }
-
-            }
-
-
         System.out.println("Pasangan shift tidak boleh Weekend");
         for (int i = 0; i < shiftWend.length; i++) {
             System.out.println(Arrays.toString(shiftWend[i]));
@@ -277,10 +265,6 @@ public class Main {
 
         }
     }
-
-
-
-
        // initsol();
 
 
