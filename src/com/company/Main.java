@@ -285,7 +285,7 @@ public class Main {
                             if (checkHC4Com(a, j)) {
                                 if (checkHC4Weekend(i, j)) {
                                    if (checkHC7(soltmatrix, i, a, j)) {
-                                        if (checkHC5(soltmatrix, i, a, j)) {
+                                        if (checkHC5(soltmatrix, i, a+1, j)) {
                                             soltmatrix[j][i] = a+1;
                                             break;
                                         }
@@ -307,12 +307,13 @@ public class Main {
                             if (checkHC4Com(a, j)) {
                                 if (checkHC4Weekend(i, j)) {
                                     if (checkHC7(soltmatrix, i, a, j)) {
-                                      //  if (checkHC5(soltmatrix, i, a, j)) {
+                                        if (checkHC5(soltmatrix, i, a+1, j)) {
                                             soltmatrix[j][i] = a + 1;
                                             break;
                                         }
 
                                     }
+                                }
                                 }
                             }
                         }
