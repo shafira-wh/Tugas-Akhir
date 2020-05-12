@@ -471,6 +471,11 @@ public class Main {
 
         return true;
     }
+    public static boolean[] checkFreeWeekend(int[][] solution, int week) {
+        boolean[] isOk = new boolean[employees.length];
+        for (int i = 0; i < isOk.length; i++)
+            isOk[i] = false;
+    }
     public static boolean checkHC6 (int [][] solution) {
         boolean [][] check = new boolean[employees.length][42]];
         for (int i = 0; i < 42; i++) {
