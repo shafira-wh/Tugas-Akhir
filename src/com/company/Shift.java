@@ -6,6 +6,7 @@ import java.util.Locale;
 public class Shift {
 
     public int idShift;
+    double [] duration;
     public double mon;
     public double tue;
     public double wed;
@@ -20,10 +21,11 @@ public class Shift {
     public String competence;
 
 
-    public Shift(int id_shift, double monday, double tuesday, double wednesday, double thursday,
+    public Shift(int id_shift, double [] shift_duration,double monday, double tuesday, double wednesday, double thursday,
                  double friday, double saturday, double sunday, int  shift_cat, String shift_name,
                  LocalTime start, LocalTime end, String s_competence) {
         idShift = id_shift;
+        duration = shift_duration;
         mon = monday;
         tue = tuesday;
         wed = wednesday;
@@ -41,6 +43,11 @@ public class Shift {
     public int getIdShift() {
         return idShift;
     }
+
+    public double getDuration(int i) {
+        return duration [i];
+    }
+
     public double getMon() {
         return mon;
     }
@@ -63,7 +70,7 @@ public class Shift {
         return sun;
     }
     public int getShiftCat(){
-    return  shiftCat;
+        return  shiftCat;
     }
     public String getShiftName() {
         return shiftName;
