@@ -11,16 +11,11 @@ import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    /*  public static final String file = "D:\\Kuliah!\\Semester 7\\PTA\\Nurse Rostering Data\\OpTur1.xls";
-      public static final String file = "D:\\Kuliah!\\Semester 7\\PTA\\Nurse Rostering Data\\OpTur2.xls";
-      public static final String file = "D:\\Kuliah!\\Semester 7\\PTA\\Nurse Rostering Data\\OpTur3.xls";
-      public static final String file = "D:\\Kuliah!\\Semester 7\\PTA\\Nurse Rostering Data\\OpTur4.xls";
-      public static final String file = "D:\\Kuliah!\\Semester 7\\PTA\\Nurse Rostering Data\\OpTur5.xls";
-      public static final String file = "D:\\Kuliah!\\Semester 7\\PTA\\Nurse Rostering Data\\OpTur6.xls";
-     */
-    public static final String file = "D:\\Kuliah!\\Semester 7\\PTA\\Nurse Rostering Data\\OpTur7.xls";
+    public static String filePath;
     public static Manpower[] manpowers;
     public static Employee[] employees;
     public static Shift[] shifts;
@@ -28,11 +23,32 @@ public class Main {
     public static int  [][] shiftWday;
     public static int [][] shiftWend;
     public static double [][] hourLimit;
+    public static Scanner input;
+    public static int selectedProcess;
+    public static int selectedFile;
+
+    public static String optimizedPath;
+
 
 
     public static void main(String[] args) throws IOException, ParseException {
 
+        System.out.println("Penjadwalan Perawat Dataset Benchmark Rumah Sakit di Norwegia)");
+        System.out.println("1. Solusi Awal");
+        System.out.println("2. Optimasi");
+        System.out.println("Pilih proses yang diinginkan");
+        Scanner input = new Scanner(System.in);
+        selectedProcess = input.nextInt();
+        for (int i = 0; i < 7;i++){
+            System.out.println((i+1)+ ". Optur" + (i+1));
+        }
+        System.out.println("File terpilih :");
+        selectedFile = input.nextInt();
 
+        optimizedPath = "D:\\Kuliah!\\Semester 7\\PTA\\Nurse Rostering Data\\Optimasi\\ OpTur" + (selectedFile) +".txt";
+        filePath = "D:\\Kuliah!\\Semester 7\\PTA\\Nurse Rostering Data\\OpTur" + (selectedFile) +".xls";
+
+        
         // Read sheet1 Employee (Int)
         String[][] read = readFile().clone();
         employees = new Employee[read.length];
@@ -283,9 +299,52 @@ public class Main {
 
 
 
-            initsol();
+           //initsol();
+        public static void initialSolution() {
+            int [][] matrix_solution = new int[employees.length][42];
+            for(int i = 0; i<matrix_solution.length; i++)
+                for(int j=0; j<matrix_solution[i].length;  j++)
+                    matrix_solution[i][j] = 0;
+
+            for (int i = 5; i < 42; i=i+7) {
+                while (!validDay(matrix_solution, i)) {
+                    int shift = isMissing(matrix_solution, i);
+                    int randomEmp = (int) (Math.random() * employees.length);
+                    if (checkHC2(matrix_solution, i, shift, randomEmp))
+                        matrix_solution[randomEmp][i] = shift;
+                }
+            }
+            for (int i = 6; i < 42; i=i+7) {
+                while (!validDay(matrix_solution, i)) {
+                    int shift = isMissing(matrix_solution, i);
+                    int randomEmp = (int) (Math.random() * employees.length);
+                    if (checkHC2(matrix_solution, i, shift, randomEmp))
+                        matrix_solution[randomEmp][i] = shift;
+                }
+            }
+            for (int i = 0; i < 42; i++) {
+                if (i % 7 == 5 || i % 7 == 6)
+                    continue;
+                while (!validDay(matrix_solution, i)) {
+                    int shift = isMissing(matrix_solution, i);
+                    int randomEmp = (int) (Math.random() * employees.length);
+                    if (checkHC2(matrix_solution, i, shift, randomEmp))
+                        matrix_solution[randomEmp][i] = shift;
+                }
+            }
+        }
         }
 
+    private static int isMissing(int[][] matrix_solution, int i) {
+        for (int i = 0; i < plan.length; i++)
+            if (plan[i].getNeed(day % 7) > needs(solution, i+1, day))
+                return i+1;
+        return 0;
+    }
+
+    private static boolean validDay(int[][] matrix_solution, int i) {
+    }
+    
 
 
     public static double [] allWorkHour (int [][] solution, int week){
@@ -475,7 +534,90 @@ public class Main {
         boolean[] isOk = new boolean[employees.length];
         for (int i = 0; i < isOk.length; i++)
             isOk[i] = false;
+        label : for(int j=0;  j<employees.length; j++) {
+            for(int i=7*week; i<(week+1)*7;i++)
+            {
+                if(solution[j][i]==0)
+                {
+                    if(i==week*7)
+                    {
+                        if(solution[j][i+1]==0)
+                        {
+                            isOk[j] = true;
+                            continue label;
+                        }
+                        else
+                        {
+                            if(shifts[solution[j][i+1]-1].getShiftCat()!=1)
+                            {
+                                isOk[j] = true;
+                                continue label;
+                            }
+                            else
+                            {
+                                LocalTime lessthan =  LocalTime.parse("08:00");
+                                if(shifts[solution[j][i+1]-1].getStartTime().isAfter(lessthan));
+                                {
+                                    isOk[j] = true;
+                                    continue label;
+                                }
+                            }
+                        }
+                    }
+                    if(i>week*7 && i<((week+1)*7)-1)
+                    {
+                        if(solution[j][i+1]==0||solution[j][i-1]==0)
+                        {
+                            isOk[j] = true;
+                            continue label;
+                        }
+                        if(solution[j][i+1]!=0&&shifts[solution[j][i+1]-1].getShiftCat()!=1)
+                        {
+                            isOk[j] = true;
+                            continue label;
+                        }
+                        if(solution[j][i+1]!=0&&shifts[solution[j][i+1]-1].getShiftCat()==1)
+                        {
+                            if(shifts[solution[j][i-1]-1].getShiftCat()!=3)
+                            {
+                                LocalTime lessthan  = LocalTime.parse("08:00");
+                                LocalTime limit = LocalTime.parse("00:00");
+                                LocalTime before = limit.minusHours(shifts[solution[j][i-1]-1].getEndTime().getHour()).minusMinutes(shifts[solution[j][i-1]-1].getEndTime().getMinute());
+                                LocalTime total = before.plusHours(shifts[solution[j][i+1]-1].getStartTime().getHour()).minusMinutes(shifts[solution[j][i+1]-1].getStartTime().getMinute());
+                                if(total.isAfter(lessthan))
+                                {
+                                    isOk[j] = true;
+                                    continue label;
+                                }
+                            }
+                        }
+                    }
+                    if(i==((week+1)*7)-1)
+                    {
+                        if(solution[j][i-1]==0)
+                        {
+                            isOk[j] = true;
+                            continue label;
+                        }
+                        else
+                        {
+                            LocalTime  lessthan  = LocalTime.parse("08:00");
+                            LocalTime limit = LocalTime.parse("00:00");
+                            LocalTime before = limit.minusHours(shifts[solution[j][i-1]-1].getEndTime().getHour()).minusMinutes(shifts[solution[j][i-1]-1].getEndTime().getMinute());
+                            if(before.isAfter(lessthan))
+                            {
+                                isOk[j] = true;
+                                continue label;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return isOk;
     }
+
+
     public static boolean checkHC6 (int [][] solution) {
         boolean [][] check = new boolean[employees.length][42]];
         for (int i = 0; i < 42; i++) {

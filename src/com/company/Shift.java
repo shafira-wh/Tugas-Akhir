@@ -6,14 +6,7 @@ import java.util.Locale;
 public class Shift {
 
     public int idShift;
-    double [] duration;
-    public double mon;
-    public double tue;
-    public double wed;
-    public double thur;
-    public double fri;
-    public double sat;
-    public double sun;
+    public double [] duration;
     public int shiftCat;
     public String shiftName;
     public LocalTime startTime;
@@ -21,23 +14,15 @@ public class Shift {
     public String competence;
 
 
-    public Shift(int id_shift, double [] shift_duration,double monday, double tuesday, double wednesday, double thursday,
-                 double friday, double saturday, double sunday, int  shift_cat, String shift_name,
-                 LocalTime start, LocalTime end, String s_competence) {
+    public Shift(int id_shift, double [] shift_duration, int  shift_cat, String shift_name,
+                 LocalTime start, LocalTime end, String shift_competence) {
         idShift = id_shift;
         duration = shift_duration;
-        mon = monday;
-        tue = tuesday;
-        wed = wednesday;
-        thur = thursday;
-        fri = friday;
-        sat = saturday;
-        sun = sunday;
         shiftCat = shift_cat;
         startTime = start;
         endTime = end;
         shiftName = shift_name;
-        competence = s_competence;
+        competence = shift_competence;
     }
 
     public int getIdShift() {
@@ -46,28 +31,6 @@ public class Shift {
 
     public double getDuration(int i) {
         return duration [i];
-    }
-
-    public double getMon() {
-        return mon;
-    }
-    public double getTue() {
-        return tue;
-    }
-    public double getWed() {
-        return wed;
-    }
-    public double getThur() {
-        return thur;
-    }
-    public double getFri() {
-        return fri;
-    }
-    public double getSat() {
-        return sat;
-    }
-    public double getSun() {
-        return sun;
     }
     public int getShiftCat(){
         return  shiftCat;
