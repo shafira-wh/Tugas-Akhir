@@ -330,6 +330,7 @@ public class Constraint {
     public boolean getSc7() {
         return sc7;
     }
+
     public void setSc8(){
         if(consValue[13].equals("N/A"))
             sc8 = 0;

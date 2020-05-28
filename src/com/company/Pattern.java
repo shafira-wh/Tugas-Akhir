@@ -1,21 +1,21 @@
 package com.company;
 
 public class Pattern {
-    public String startDay;
-    public String shiftPattern;
+    public int startDay;
+    public String [] shiftPattern;
 
-    public Pattern(String starts_day, String shift_pattern){
+    public Pattern(int starts_day, String [] shift_pattern){
 
         startDay = starts_day;
         shiftPattern = shift_pattern;
     }
 
 
-    public String getStartDay() {
+    public int getStartDay() {
         return startDay;
     }
 
-    public String getShiftPattern() {
+    public String [] getShiftPattern() {
         return shiftPattern;
     }
 }
