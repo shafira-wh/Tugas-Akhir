@@ -420,6 +420,17 @@ public class Main {
 
 }
 
+    public static void print(int[][] printAll)
+    {
+        for(int i = 0; i<printAll.length; i++)
+        {
+            for(int j=0; j<printAll[i].length; j++)
+            {
+                System.out.print(printAll[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
     private static int isMissing(int[][] solution, int day) {
         for (int i = 0; i < manpowers.length; i++)
             if (manpowers[i].getShiftNeeded(day % 7) > needs(solution, i+1, day))
@@ -436,7 +447,91 @@ public class Main {
         return true;
         }
 
+        public static int checkAllHc(int [][] solution){
+        if (!checkHC2(solution))
+            return 2;
+            if (!checkHC3(solution))
+                return 3;
+            if (!checkHc4Com(solution))
+                return 4;
+            if (!checkHc5(solution))
+                return 5;
+            if (!checkHC6(solution))
+                return 6;
+            if (!checkHc7(solution))
+                return 7;
+            return false;
 
+    }
+
+    public static void exchangeTwo (int [][] solution) {
+        int randomDay =  -1;
+        do{
+            randomDay = (int) (Math.random() * plannedHorizon[selectedFile-1]*7);
+        } while (randomDay % 7 == 5 || randomDay % 7 == 6);
+
+        int randomEmp1 = -1;
+        int randomEmp2 = -1;
+//        int randomEmp1 = (int) (Math.random() * emp.length);
+//        int randomEmp2 = (int) (Math.random() * emp.length);
+        do {
+            randomEmp1 = (int) (Math.random() * employees.length);
+        } while (solution[randomEmp1][randomDay]==0);
+
+        do {
+            randomEmp2 = (int) (Math.random() * employees.length);
+        } while (solution[randomEmp2][randomDay]!=0);
+
+        int shiftExchange = solution[randomEmp1][randomDay];
+        solution[randomEmp1][randomDay] = solution[randomEmp2][randomDay];
+        solution[randomEmp2][randomDay] = shiftExchange;
+    }
+    public static void exchangeThree (int [][] solution) {
+        int randomDay = (int) (Math.random() * plannedHorizon[selectedFile-1]*7);
+        int randomEmp1 = -1;
+        int randomEmp2 = -1;
+        int randomEmp3 = -1;
+
+        do {
+            randomEmp1 = (int) (Math.random() * employees.length);
+        } while (solution[randomEmp1][randomDay] == 0 || randomEmp1 == randomEmp2 || randomEmp1 == randomEmp3);
+        do {
+            randomEmp2 = (int) (Math.random() * employees.length);
+        } while (solution[randomEmp2][randomDay] == 0 || randomEmp2 == randomEmp1 || randomEmp2 == randomEmp3);
+        do {
+            randomEmp3 = (int) (Math.random() * employees.length);
+        } while (solution[randomEmp3][randomDay] == 0 || randomEmp3 == randomEmp1 || randomEmp3 == randomEmp2);
+
+        int shiftExchange = solution[randomEmp1][randomDay];
+        solution[randomEmp1][randomDay] = solution[randomEmp2][randomDay];
+        solution[randomEmp2][randomDay] = solution[randomEmp3][randomDay];
+        solution[randomEmp3][randomDay] = shiftExchange;
+    }
+    public static void double2Exchange(int [][] solution) {
+        int randomEmp1 = -1;
+        int randomEmp2 = -1;
+        int randomDay1 = -1;
+        int randomDay2 = -1;
+        while (randomEmp1 == -1 || randomEmp2 == -1) {
+            do {
+                randomDay1 = (int) (Math.random() * plannedHorizon[selectedFile-1]*7);
+                randomDay2 = (int) (Math.random() * plannedHorizon[selectedFile-1]*7);
+            } while (randomDay1 % 7 == 5 || randomDay1 % 7 == 6 || randomDay2 % 7 == 5 || randomDay2 % 7 == 6);
+            for (int i = 0; i < employees.length; i++) {
+                for (int j = 0; j < employees.length; j++) {
+                    if (solution[i][randomDay1] != 0 && solution[j][randomDay2] != 0 && shifts[solution[i][randomDay1]-1].getShiftCat() == shifts[solution[j][randomDay2]-1].getShiftCat())
+                        if (solution[i][randomDay2] == 0 && solution[j][randomDay1] == 0) {
+                            randomEmp1 = i;
+                            randomEmp2 = j;
+                        }
+                }
+            }
+        }
+        solution[randomEmp2][randomDay1] = solution[randomEmp1][randomDay1];
+        solution[randomEmp1][randomDay1] = 0;
+        solution[randomEmp1][randomDay2] = solution[randomEmp2][randomDay2];
+        solution[randomEmp2][randomDay2] = 0;
+    }
 
     public static int plannedHorizon (int [][] weeklength){
         if ((weeklength.length == 0|| (weeklength[0].length == 0))) {
@@ -553,12 +648,12 @@ public class Main {
         return count;
     }
 
-    public static boolean checkHC2(int[][] solution, int day, int shift, int employee) {
+    public static boolean AssignHC2(int[][] solution, int day, int shift, int employee) {
         if (manpowers[shift - 1].getShiftNeeded(day % 7) > needs(solution, shift, day))
-            if (checkHC4Com(shift, employee)) {
-                if (checkHC4Weekend(day, employee)) {
-                    if (checkHC7(solution, day, shift, employee)) {
-                        if (checkHC5(solution, day, shift, employee)) {
+            if (AssignHC4Com(shift, employee)) {
+                if (AssignHC4Weekend(day, employee)) {
+                    if (AssignHC7(solution, day, shift, employee)) {
+                        if (AssignHC5(solution, day, shift, employee)) {
                             return true;
                         }
                     }
@@ -567,25 +662,16 @@ public class Main {
         return false;
     }
 
-    public static boolean checkHC3 (int [][] solution){
-        double [] hourWork = averageWorkHour(solution, plannedHorizon[selectedFile-1]).clone();
-        for (int i = 0; i < hourWork.length; i++) {
-            if (hourWork[i] > hourLimit[i][2])
-                return false;
-            if (hourWork[i] < hourLimit[i][0])
-                return false;
-        }
-        return true;
-    }
 
-    public static boolean checkHC4Com(int shift, int employee) {
-        if (shifts[shift].getCompetence().equals("A") && employees[employee].getCompetence().equals("")) {
+
+    public static boolean AssignHC4Com(int shift, int employee) {
+        if (shifts[shift-1].getCompetence().equals("A") && employees[employee].getCompetence().equals("")) {
             return false;
         }
         return true;
     }
 
-    public static boolean checkHC4Weekend(int day, int employee) {
+    public static boolean AssignHC4Weekend(int day, int employee) {
         if (day % 7 == 5 || day % 7 == 6) {
             for (int i = 0; i < employees[employee].getWorkWeekend().length; i++) {
                 if (day / 7 == employees[employee].getWorkWeekend()[i] - 1)
@@ -596,7 +682,7 @@ public class Main {
         return true;
     }
 
-    public static boolean checkHC5 (int [][] solution, int day, int shift, int employee) {
+    public static boolean AssignHC5 (int [][] solution, int day, int shift, int employee) {
         if (day == 0)
             return true;
 
@@ -736,7 +822,7 @@ public class Main {
     }
 
 
-    public static boolean checkHC7(int[][] solution, int day, int shift, int employee) {
+    public static boolean AssignHC7(int[][] solution, int day, int shift, int employee) {
         double sumTotal = shifts[shift - 1].getDuration(day % 7);
         if (sumTotals(solution, day, employee) + sumTotal <= constraints.getHc7()) {
         return true;
@@ -753,7 +839,36 @@ public class Main {
         }
         return count;
     }
-
+    public static boolean checkHC2(int [][] solution ){
+        for (int i=0; i<plannedHorizon[selectedFile-1]*7; i++){
+            for (int j=0; j<manpowers.length; j++){
+                if (manpowers[j].getShiftNeeded(i%7)!= needs(solution, j+1, i))
+                    return false;
+            }
+        }
+    return true;
+    }
+    public static boolean checkHC3 (int [][] solution){
+        double [] hourWork = averageWorkHour(solution, plannedHorizon[selectedFile-1]).clone();
+        for (int i = 0; i < hourWork.length; i++) {
+            if (hourWork[i] > hourLimit[i][2])
+                return false;
+            if (hourWork[i] < hourLimit[i][0])
+                return false;
+        }
+        return true;
+    }
+    public static boolean checkHC4Com (int [][] solution) {
+        for (int i = 0; i < solution.length; i++) {
+            for (int j = 0; j < solution[i].length; j++) {
+                if (solution[i][j] != 0) {
+                    if (shifts[solution[i][j] - 1].getCompetence().equals("A") && employees[i].getCompetence().equals("")) {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
 
 
     @NotNull
