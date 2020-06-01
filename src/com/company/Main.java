@@ -22,15 +22,15 @@ public class Main {
     public static Constraint constraints;
     public static int[][] shiftWday;
     public static int[][] shiftWend;
-    public static double [][] hourLimit;
+    public static double[][] hourLimit;
     public static Scanner input;
     public static String[][] wantedPattern;
-    public static Pattern [] thePattern;
-       public static String[][] unwantedPattern;
-    public static Pattern [] notPattern;
+    public static Pattern[] thePattern;
+    public static String[][] unwantedPattern;
+    public static Pattern[] notPattern;
     public static int selectedProcess;
     public static int selectedFile;
-    public static int [] plannedHorizon;
+    public static int[] plannedHorizon;
 
     public static String optimizedPath;
 
@@ -374,100 +374,98 @@ public class Main {
             hourLimit[i][1] = employees[i].getWorkHour();
             hourLimit[i][2] = employees[i].getWorkHour() + (employees[i].getWorkHour() * constraints.getHc3());
         }
-        if (selectedProcess==1)
+        if (selectedProcess == 1)
             initialSolution();
-        if (selectedProcess==2);
-            optimizedSolution();
+        if (selectedProcess == 2) ;
+        optimizedSolution();
 
     }
 
-           //initsol();
-        public static void initialSolution() {
-            int [][] matrix_solution = new int[employees.length][plannedHorizon[selectedFile-1]*7];
-            for(int i = 0; i<matrix_solution.length; i++)
-                for(int j=0; j<matrix_solution[i].length;  j++)
-                    matrix_solution[i][j] = 0;
+    //initsol();
+    public static void initialSolution() {
+        int[][] matrix_solution = new int[employees.length][plannedHorizon[selectedFile - 1] * 7];
+        for (int i = 0; i < matrix_solution.length; i++)
+            for (int j = 0; j < matrix_solution[i].length; j++)
+                matrix_solution[i][j] = 0;
 
-            for (int i = 5; i < plannedHorizon[selectedFile-1]*7; i=i+7) {
-                while (!validDay(matrix_solution, i)) {
-                    int shift = isMissing(matrix_solution, i);
-                    int randomEmp = (int) (Math.random() * employees.length);
-                    if (checkHC2(matrix_solution, i, shift, randomEmp))
-                        matrix_solution[randomEmp][i] = shift;
-                }
-            }
-            for (int i = 6; i < plannedHorizon[selectedFile-1]*7; i=i+7) {
-                while (!validDay(matrix_solution, i)) {
-                    int shift = isMissing(matrix_solution, i);
-                    int randomEmp = (int) (Math.random() * employees.length);
-                    if (checkHC2(matrix_solution, i, shift, randomEmp))
-                        matrix_solution[randomEmp][i] = shift;
-                }
-            }
-            for (int i = 0; i < plannedHorizon[selectedFile-1]*7; i++) {
-                if (i % 7 == 5 || i % 7 == 6)
-                    continue;
-                while (!validDay(matrix_solution, i)) {
-                    int shift = isMissing(matrix_solution, i);
-                    int randomEmp = (int) (Math.random() * employees.length);
-                    if (checkHC2(matrix_solution, i, shift, randomEmp))
-                        matrix_solution[randomEmp][i] = shift;
-                }
+        for (int i = 5; i < plannedHorizon[selectedFile - 1] * 7; i = i + 7) {
+            while (!validDay(matrix_solution, i)) {
+                int shift = isMissing(matrix_solution, i);
+                int randomEmp = (int) (Math.random() * employees.length);
+                if (assignHC2(matrix_solution, i, shift, randomEmp))
+                    matrix_solution[randomEmp][i] = shift;
             }
         }
+        for (int i = 6; i < plannedHorizon[selectedFile - 1] * 7; i = i + 7) {
+            while (!validDay(matrix_solution, i)) {
+                int shift = isMissing(matrix_solution, i);
+                int randomEmp = (int) (Math.random() * employees.length);
+                if (assignHC2(matrix_solution, i, shift, randomEmp))
+                    matrix_solution[randomEmp][i] = shift;
+            }
+        }
+        for (int i = 0; i < plannedHorizon[selectedFile - 1] * 7; i++) {
+            if (i % 7 == 5 || i % 7 == 6)
+                continue;
+            while (!validDay(matrix_solution, i)) {
+                int shift = isMissing(matrix_solution, i);
+                int randomEmp = (int) (Math.random() * employees.length);
+                if (assignHC2(matrix_solution, i, shift, randomEmp))
+                    matrix_solution[randomEmp][i] = shift;
+            }
+        }
+    }
 
- public static void optimizedSolution(){
+    public static void optimizedSolution() {
 
-}
+    }
 
-    public static void print(int[][] printAll)
-    {
-        for(int i = 0; i<printAll.length; i++)
-        {
-            for(int j=0; j<printAll[i].length; j++)
-            {
+    public static void print(int[][] printAll) {
+        for (int i = 0; i < printAll.length; i++) {
+            for (int j = 0; j < printAll[i].length; j++) {
                 System.out.print(printAll[i][j] + " ");
             }
             System.out.println();
         }
     }
+
     private static int isMissing(int[][] solution, int day) {
         for (int i = 0; i < manpowers.length; i++)
-            if (manpowers[i].getShiftNeeded(day % 7) > needs(solution, i+1, day))
-                return i+1;
+            if (manpowers[i].getShiftNeeded(day % 7) > needs(solution, i + 1, day))
+                return i + 1;
         return 0;
     }
 
-    private static boolean validDay(int [][] solution, int day) {
-        for (int i =0; i<manpowers.length; i++) {
+    private static boolean validDay(int[][] solution, int day) {
+        for (int i = 0; i < manpowers.length; i++) {
             if (manpowers[i].getShiftNeeded(day % 7) != needs(solution, i + 1, day))
                 return false;
 
         }
         return true;
-        }
+    }
 
-        public static int checkAllHc(int [][] solution){
+    public static int checkAllHc(int[][] solution) {
         if (!checkHC2(solution))
             return 2;
-            if (!checkHC3(solution))
-                return 3;
-            if (!checkHc4Com(solution))
-                return 4;
-            if (!checkHc5(solution))
-                return 5;
-            if (!checkHC6(solution))
-                return 6;
-            if (!checkHc7(solution))
-                return 7;
-            return false;
+        if (!checkHC3(solution))
+            return 3;
+        if (!checkHC4Com(solution))
+            return 4;
+        if (!checkHC5(solution))
+            return 5;
+        if (!checkHC6(solution))
+            return 6;
+        if (!checkHC7(solution))
+            return 7;
+        return 0;
 
     }
 
-    public static void exchangeTwo (int [][] solution) {
-        int randomDay =  -1;
-        do{
-            randomDay = (int) (Math.random() * plannedHorizon[selectedFile-1]*7);
+    public static void exchangeTwo(int[][] solution) {
+        int randomDay = -1;
+        do {
+            randomDay = (int) (Math.random() * plannedHorizon[selectedFile - 1] * 7);
         } while (randomDay % 7 == 5 || randomDay % 7 == 6);
 
         int randomEmp1 = -1;
@@ -476,18 +474,19 @@ public class Main {
 //        int randomEmp2 = (int) (Math.random() * emp.length);
         do {
             randomEmp1 = (int) (Math.random() * employees.length);
-        } while (solution[randomEmp1][randomDay]==0);
+        } while (solution[randomEmp1][randomDay] == 0);
 
         do {
             randomEmp2 = (int) (Math.random() * employees.length);
-        } while (solution[randomEmp2][randomDay]!=0);
+        } while (solution[randomEmp2][randomDay] != 0);
 
         int shiftExchange = solution[randomEmp1][randomDay];
         solution[randomEmp1][randomDay] = solution[randomEmp2][randomDay];
         solution[randomEmp2][randomDay] = shiftExchange;
     }
-    public static void exchangeThree (int [][] solution) {
-        int randomDay = (int) (Math.random() * plannedHorizon[selectedFile-1]*7);
+
+    public static void exchangeThree(int[][] solution) {
+        int randomDay = (int) (Math.random() * plannedHorizon[selectedFile - 1] * 7);
         int randomEmp1 = -1;
         int randomEmp2 = -1;
         int randomEmp3 = -1;
@@ -507,19 +506,20 @@ public class Main {
         solution[randomEmp2][randomDay] = solution[randomEmp3][randomDay];
         solution[randomEmp3][randomDay] = shiftExchange;
     }
-    public static void double2Exchange(int [][] solution) {
+
+    public static void double2Exchange(int[][] solution) {
         int randomEmp1 = -1;
         int randomEmp2 = -1;
         int randomDay1 = -1;
         int randomDay2 = -1;
         while (randomEmp1 == -1 || randomEmp2 == -1) {
             do {
-                randomDay1 = (int) (Math.random() * plannedHorizon[selectedFile-1]*7);
-                randomDay2 = (int) (Math.random() * plannedHorizon[selectedFile-1]*7);
+                randomDay1 = (int) (Math.random() * plannedHorizon[selectedFile - 1] * 7);
+                randomDay2 = (int) (Math.random() * plannedHorizon[selectedFile - 1] * 7);
             } while (randomDay1 % 7 == 5 || randomDay1 % 7 == 6 || randomDay2 % 7 == 5 || randomDay2 % 7 == 6);
             for (int i = 0; i < employees.length; i++) {
                 for (int j = 0; j < employees.length; j++) {
-                    if (solution[i][randomDay1] != 0 && solution[j][randomDay2] != 0 && shifts[solution[i][randomDay1]-1].getShiftCat() == shifts[solution[j][randomDay2]-1].getShiftCat())
+                    if (solution[i][randomDay1] != 0 && solution[j][randomDay2] != 0 && shifts[solution[i][randomDay1] - 1].getShiftCat() == shifts[solution[j][randomDay2] - 1].getShiftCat())
                         if (solution[i][randomDay2] == 0 && solution[j][randomDay1] == 0) {
                             randomEmp1 = i;
                             randomEmp2 = j;
@@ -533,110 +533,107 @@ public class Main {
         solution[randomEmp2][randomDay2] = 0;
     }
 
-    public static int plannedHorizon (int [][] weeklength){
-        if ((weeklength.length == 0|| (weeklength[0].length == 0))) {
+    public static int plannedHorizon(int[][] weeklength) {
+        if ((weeklength.length == 0 || (weeklength[0].length == 0))) {
             System.out.println("Empty Array");
         }
         int max = weeklength[0][0];
-        for (int i=0;i<weeklength.length;i++){
-            for (int j=0;j<weeklength[i].length;i++){
-            if (weeklength[i][j] > max){
-                max = weeklength[i][j];
+        for (int i = 0; i < weeklength.length; i++) {
+            for (int j = 0; j < weeklength[i].length; i++) {
+                if (weeklength[i][j] > max) {
+                    max = weeklength[i][j];
+                }
             }
         }
-    }
         return max;
     }
 
 
-    public static double [] allWorkHour (int [][] solution, int week){
-        double [] workhour_week = new double [15];
+    public static double[] allWorkHour(int[][] solution, int week) {
+        double[] workhour_week = new double[15];
         for (int i = 0; i < 15; i++) {
-            for (int j = week*7; j < (week+1)*7; j++) {
-                if (solution [i][j] != 0) {
-                    workhour_week[i] = workhour_week[i] + shifts[solution[i][j]-1].getDuration(j % 7);
+            for (int j = week * 7; j < (week + 1) * 7; j++) {
+                if (solution[i][j] != 0) {
+                    workhour_week[i] = workhour_week[i] + shifts[solution[i][j] - 1].getDuration(j % 7);
                 }
             }
         }
         return workhour_week;
     }
-    public static double [] averageWorkHour (int [][] solution, int week){
-        double [] avg = new double[15];
+
+    public static double[] averageWorkHour(int[][] solution, int week) {
+        double[] avg = new double[15];
 
         for (int i = 0; i < week; i++) {
             for (int j = 0; j < 15; j++) {
-                avg [j] = avg[j] + allWorkHour(solution, i)[j];
+                avg[j] = avg[j] + allWorkHour(solution, i)[j];
             }
         }
         for (int i = 0; i < 15; i++) {
-            avg [i] = (avg[i]/week);
+            avg[i] = (avg[i] / week);
         }
         return avg;
     }
 
 
-
-
-
-
     // Membuat Matriks
-    public static void initsol() {
-        int[][] soltmatrix = new int[15][42];
-
-        // Assign Jadwal Weekend (5-6)
-        for (int i = 0; i < 42; i++) {
-            if (i % 7 == 5 || i % 7 == 6) {
-                for (int j = 0; j < 15; j++) {
-                    for (int a = 0; a < 6; a++) {
-                        //Mengecek HC
-                        if (checkHC2(soltmatrix, i, a, j)) {
-                            if (checkHC4Com(a, j)) {
-                                if (checkHC4Weekend(i, j)) {
-                                    if (checkHC7(soltmatrix, i, a, j)) {
-                                        if (checkHC5(soltmatrix, i, a+1, j)) {
-                                            soltmatrix[j][i] = a+1;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-//         Assign Jadwal Weekdays (0-4)
-        for (int i = 0; i < 42; i++) {
-            if (i % 7 == 0 || i % 7 == 1 || i % 7 == 2 || i % 7 == 3 || i % 7 == 4) {
-                for (int j = 0; j < 15; j++) {
-                    for (int a = 0; a < 6; a++) {
-                        // Mengecek HC
-                        if (checkHC2(soltmatrix, i, a, j)) {
-                            if (checkHC4Com(a, j)) {
-                                if (checkHC4Weekend(i, j)) {
-                                    if (checkHC7(soltmatrix, i, a, j)) {
-                                        if (checkHC5(soltmatrix, i, a+1, j)) {
-                                            soltmatrix[j][i] = a + 1;
-                                            break;
-                                        }
-
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-
-        for (int i = 0; i < soltmatrix.length; i++) {
-            for (int j = 0; j < soltmatrix[i].length; j++) {
-                System.out.print(soltmatrix[i][j] + " ");
-            }
-            System.out.println("");
-        }
-    }
+//    public static void initsol() {
+//        int[][] soltmatrix = new int[15][42];
+//
+//        // Assign Jadwal Weekend (5-6)
+//        for (int i = 0; i < 42; i++) {
+//            if (i % 7 == 5 || i % 7 == 6) {
+//                for (int j = 0; j < 15; j++) {
+//                    for (int a = 0; a < 6; a++) {
+//                        //Mengecek HC
+//                        if (checkHC2(soltmatrix, i, a, j)) {
+//                            if (checkHC4Com(a, j)) {
+//                                if (checkHC4Weekend(i, j)) {
+//                                    if (checkHC7(soltmatrix, i, a, j)) {
+//                                        if (checkHC5(soltmatrix, i, a + 1, j)) {
+//                                            soltmatrix[j][i] = a + 1;
+//                                            break;
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+////         Assign Jadwal Weekdays (0-4)
+//        for (int i = 0; i < 42; i++) {
+//            if (i % 7 == 0 || i % 7 == 1 || i % 7 == 2 || i % 7 == 3 || i % 7 == 4) {
+//                for (int j = 0; j < 15; j++) {
+//                    for (int a = 0; a < 6; a++) {
+//                        // Mengecek HC
+//                        if (checkHC2(soltmatrix, i, a, j)) {
+//                            if (checkHC4Com(a, j)) {
+//                                if (checkHC4Weekend(i, j)) {
+//                                    if (checkHC7(soltmatrix, i, a, j)) {
+//                                        if (checkHC5(soltmatrix, i, a + 1, j)) {
+//                                            soltmatrix[j][i] = a + 1;
+//                                            break;
+//                                        }
+//
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//
+//        for (int i = 0; i < soltmatrix.length; i++) {
+//            for (int j = 0; j < soltmatrix[i].length; j++) {
+//                System.out.print(soltmatrix[i][j] + " ");
+//            }
+//            System.out.println("");
+//        }
+//    }
 
 
     public static int needs(int[][] solution, int shift, int day) {
@@ -648,12 +645,12 @@ public class Main {
         return count;
     }
 
-    public static boolean AssignHC2(int[][] solution, int day, int shift, int employee) {
+    public static boolean assignHC2(int[][] solution, int day, int shift, int employee) {
         if (manpowers[shift - 1].getShiftNeeded(day % 7) > needs(solution, shift, day))
-            if (AssignHC4Com(shift, employee)) {
-                if (AssignHC4Weekend(day, employee)) {
-                    if (AssignHC7(solution, day, shift, employee)) {
-                        if (AssignHC5(solution, day, shift, employee)) {
+            if (assignHC4Com(shift, employee)) {
+                if (assignHC4Weekend(day, employee)) {
+                    if (assignHC7(solution, day, shift, employee)) {
+                        if (assignHC5(solution, day, shift, employee)) {
                             return true;
                         }
                     }
@@ -663,48 +660,48 @@ public class Main {
     }
 
 
-
-    public static boolean AssignHC4Com(int shift, int employee) {
-        if (shifts[shift-1].getCompetence().equals("A") && employees[employee].getCompetence().equals("")) {
+    public static boolean assignHC4Com(int shift, int employee) {
+        if (shifts[shift - 1].getCompetence().equals("A") && employees[employee].getCompetence().equals("")) {
             return false;
         }
         return true;
     }
 
-    public static boolean AssignHC4Weekend(int day, int employee) {
+    public static boolean assignHC4Weekend(int day, int employee) {
         if (day % 7 == 5 || day % 7 == 6) {
             for (int i = 0; i < employees[employee].getWorkWeekend().length; i++) {
                 if (day / 7 == employees[employee].getWorkWeekend()[i] - 1)
                     return true;
             }
-            return false;
-        }
-        return true;
+        } else return true;
+        return false;
     }
 
-    public static boolean AssignHC5 (int [][] solution, int day, int shift, int employee) {
+
+    public static boolean assignHC5(int[][] solution, int day, int shift, int employee) {
         if (day == 0)
             return true;
 
         if (day % 7 == 5 || day % 7 == 6) {
-            for (int i = 0; i < shiftWend.length; i++){
-                if (solution[employee][day-1] == shiftWend[i][0] && shift == shiftWend [i][1]){
+            for (int i = 0; i < shiftWend.length; i++) {
+                if (solution[employee][day - 1] == shiftWend[i][0] && shift == shiftWend[i][1]) {
                     return false;
                 }
-                if (day < (plannedHorizon[selectedFile-1]*7)-1) {
-                    if (solution [employee][day+1]== shiftWend[i][1] && shift == shiftWend[i][0])
+                if (day < (plannedHorizon[selectedFile - 1] * 7) - 1) {
+                    if (solution[employee][day + 1] == shiftWend[i][1] && shift == shiftWend[i][0])
                         return false;
                 }
             }
 
         }
-        if (day % 7 == 0 || day % 7 == 1 || day % 7 == 2 || day % 7 == 3 || day % 7 == 4){
-            for (int i = 0; i < shiftWday.length; i++){
-                if (solution[employee][day-1] == shiftWday[i][0] && shift == shiftWday [i][1]){
+        if (day % 7 == 0 || day % 7 == 1 || day % 7 == 2 || day % 7 == 3 || day % 7 == 4) {
+            for (int i = 0; i < shiftWday.length; i++) {
+                if (solution[employee][day - 1] == shiftWday[i][0] && shift == shiftWday[i][1]) {
                     return false;
                 }
-                if (day < (plannedHorizon[selectedFile-1]*7)-1); {
-                    if (solution [employee][day+1]== shiftWday[i][1] && shift == shiftWday[i][0])
+                if (day < (plannedHorizon[selectedFile - 1] * 7) - 1) ;
+                {
+                    if (solution[employee][day + 1] == shiftWday[i][1] && shift == shiftWday[i][0])
                         return false;
                 }
             }
@@ -713,33 +710,26 @@ public class Main {
 
         return true;
     }
+
     public static boolean[] checkFreeWeekend(int[][] solution, int week) {
         boolean[] isOk = new boolean[employees.length];
         for (int i = 0; i < isOk.length; i++)
             isOk[i] = false;
-        label : for(int j=0;  j<employees.length; j++) {
-            for(int i=7*week; i<(week+1)*7;i++)
-            {
-                if(solution[j][i]==0)
-                {
-                    if(i==week*7)
-                    {
-                        if(solution[j][i+1]==0)
-                        {
+        label:
+        for (int j = 0; j < employees.length; j++) {
+            for (int i = 7 * week; i < (week + 1) * 7; i++) {
+                if (solution[j][i] == 0) {
+                    if (i == week * 7) {
+                        if (solution[j][i + 1] == 0) {
                             isOk[j] = true;
                             continue label;
-                        }
-                        else
-                        {
-                            if(shifts[solution[j][i+1]-1].getShiftCat()!=1)
-                            {
+                        } else {
+                            if (shifts[solution[j][i + 1] - 1].getShiftCat() != 1) {
                                 isOk[j] = true;
                                 continue label;
-                            }
-                            else
-                            {
-                                LocalTime lessthan =  LocalTime.parse("08:00");
-                                if(shifts[solution[j][i+1]-1].getStartTime().isAfter(lessthan));
+                            } else {
+                                LocalTime lessthan = LocalTime.parse("08:00");
+                                if (shifts[solution[j][i + 1] - 1].getStartTime().isAfter(lessthan)) ;
                                 {
                                     isOk[j] = true;
                                     continue label;
@@ -747,48 +737,37 @@ public class Main {
                             }
                         }
                     }
-                    if(i>week*7 && i<((week+1)*7)-1)
-                    {
-                        if(solution[j][i+1]==0||solution[j][i-1]==0)
-                        {
+                    if (i > week * 7 && i < ((week + 1) * 7) - 1) {
+                        if (solution[j][i + 1] == 0 || solution[j][i - 1] == 0) {
                             isOk[j] = true;
                             continue label;
                         }
-                        if(solution[j][i+1]!=0&&shifts[solution[j][i+1]-1].getShiftCat()!=1)
-                        {
+                        if (solution[j][i + 1] != 0 && shifts[solution[j][i + 1] - 1].getShiftCat() != 1) {
                             isOk[j] = true;
                             continue label;
                         }
-                        if(solution[j][i+1]!=0&&shifts[solution[j][i+1]-1].getShiftCat()==1)
-                        {
-                            if(shifts[solution[j][i-1]-1].getShiftCat()!=3)
-                            {
-                                LocalTime lessthan  = LocalTime.parse("08:00");
+                        if (solution[j][i + 1] != 0 && shifts[solution[j][i + 1] - 1].getShiftCat() == 1) {
+                            if (shifts[solution[j][i - 1] - 1].getShiftCat() != 3) {
+                                LocalTime lessthan = LocalTime.parse("08:00");
                                 LocalTime limit = LocalTime.parse("00:00");
-                                LocalTime before = limit.minusHours(shifts[solution[j][i-1]-1].getEndTime().getHour()).minusMinutes(shifts[solution[j][i-1]-1].getEndTime().getMinute());
-                                LocalTime total = before.plusHours(shifts[solution[j][i+1]-1].getStartTime().getHour()).minusMinutes(shifts[solution[j][i+1]-1].getStartTime().getMinute());
-                                if(total.isAfter(lessthan))
-                                {
+                                LocalTime before = limit.minusHours(shifts[solution[j][i - 1] - 1].getEndTime().getHour()).minusMinutes(shifts[solution[j][i - 1] - 1].getEndTime().getMinute());
+                                LocalTime total = before.plusHours(shifts[solution[j][i + 1] - 1].getStartTime().getHour()).minusMinutes(shifts[solution[j][i + 1] - 1].getStartTime().getMinute());
+                                if (total.isAfter(lessthan)) {
                                     isOk[j] = true;
                                     continue label;
                                 }
                             }
                         }
                     }
-                    if(i==((week+1)*7)-1)
-                    {
-                        if(solution[j][i-1]==0)
-                        {
+                    if (i == ((week + 1) * 7) - 1) {
+                        if (solution[j][i - 1] == 0) {
                             isOk[j] = true;
                             continue label;
-                        }
-                        else
-                        {
-                            LocalTime  lessthan  = LocalTime.parse("08:00");
+                        } else {
+                            LocalTime lessthan = LocalTime.parse("08:00");
                             LocalTime limit = LocalTime.parse("00:00");
-                            LocalTime before = limit.minusHours(shifts[solution[j][i-1]-1].getEndTime().getHour()).minusMinutes(shifts[solution[j][i-1]-1].getEndTime().getMinute());
-                            if(before.isAfter(lessthan))
-                            {
+                            LocalTime before = limit.minusHours(shifts[solution[j][i - 1] - 1].getEndTime().getHour()).minusMinutes(shifts[solution[j][i - 1] - 1].getEndTime().getMinute());
+                            if (before.isAfter(lessthan)) {
                                 isOk[j] = true;
                                 continue label;
                             }
@@ -801,10 +780,100 @@ public class Main {
     }
 
 
-    public static boolean checkHC6 (int [][] solution) {
-        boolean [][] check = new boolean[employees.length][plannedHorizon[selectedFile-1]];
-        for (int i = 0; i < plannedHorizon[selectedFile-1]; i++) {
-            boolean [] check2 = checkFreeWeekend(solution, i).clone(); {
+
+
+    public static boolean assignHC7(int[][] solution, int day, int shift, int employee) {
+        double sumTotal = shifts[shift - 1].getDuration(day % 7);
+        if (sumTotals(solution, day, employee) + sumTotal <= constraints.getHc7()) {
+            return true;
+        }
+        return false;
+    }
+
+    public static double sumTotals(int[][] solution, int day, int employee) {
+        double count = 0;
+        int week = day / 7;
+        for (int i = week * 7; i < (week + 1); i++) {
+            if (solution[employee][i] != 0) {
+                count = count + shifts[solution[employee][i] - 1].getDuration(day % 7);
+            }
+        }
+        return count;
+    }
+
+    public static boolean checkHC2(int[][] solution) {
+        for (int i = 0; i < plannedHorizon[selectedFile - 1] * 7; i++) {
+            for (int j = 0; j < manpowers.length; j++) {
+                if (manpowers[j].getShiftNeeded(i % 7) != needs(solution, j + 1, i))
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean checkHC3(int[][] solution) {
+        double[] hourWork = averageWorkHour(solution, plannedHorizon[selectedFile - 1]).clone();
+        for (int i = 0; i < hourWork.length; i++) {
+            if (hourWork[i] > hourLimit[i][2])
+                return false;
+            if (hourWork[i] < hourLimit[i][0])
+                return false;
+        }
+        return true;
+    }
+
+    public static boolean checkHC4Com(int[][] solution) {
+        for (int i = 0; i < solution.length; i++) {
+            for (int j = 0; j < solution[i].length; j++) {
+                if (solution[i][j] != 0) {
+                    if (shifts[solution[i][j] - 1].getCompetence().equals("A") && employees[i].getCompetence().equals("")) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+public static boolean checkHC4Weekend (int [][] solution, int employee) {
+    for (int i = 0; i < plannedHorizon[selectedFile - 1] * 7; i++) {
+        if (i % 7 == 5 || i % 7 == 6) {
+            if (solution[employee][i] != 0) {
+                for (int j = 0; j < employees[employee].getWorkWeekend().length; j++) {
+                    if (i / 7 != employees[employee].getWorkWeekend()[j] - 1)
+                        return false;
+                }
+                return true;
+            }
+        }
+    }
+    return true;
+}
+public static boolean checkHC5 (int [][] solution){
+    for (int i = 0; i < plannedHorizon[selectedFile-1]*7; i++) {
+        for (int j = 0; j < employees.length; j++) {
+            if (i % 7 != 5 || i % 7 != 6) {
+                for (int a = 0; a < shiftWday.length; a++) {
+                    if (i < (plannedHorizon[selectedFile-1]*7) - 1)
+                        if (solution[j][i] == shiftWday[a][0] && solution[j][(i+1)] == shiftWday[a][1])
+                            return false;
+                }
+            }
+            else {
+                for (int a = 0; a < shiftWend.length; a++) {
+                    if (i < (plannedHorizon[selectedFile-1]*7) - 1)
+                        if (solution[j][i] == shiftWend[a][0] && solution[j][(i+1)] ==  shiftWend[a][1])
+                            return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+    public static boolean checkHC6(int[][] solution) {
+        boolean[][] check = new boolean[employees.length][plannedHorizon[selectedFile - 1]];
+        for (int i = 0; i < plannedHorizon[selectedFile - 1]; i++) {
+            boolean[] check2 = checkFreeWeekend(solution, i).clone();
+            {
                 for (int j = 0; j < check2.length; j++) {
                     check[j][i] = check2[j];
                 }
@@ -821,54 +890,53 @@ public class Main {
         return true;
     }
 
-
-    public static boolean AssignHC7(int[][] solution, int day, int shift, int employee) {
-        double sumTotal = shifts[shift - 1].getDuration(day % 7);
-        if (sumTotals(solution, day, employee) + sumTotal <= constraints.getHc7()) {
-        return true;
-    }
-        return false;
-    }
-    public static double sumTotals (int [][] solution, int day, int employee) {
-        double count = 0;
-        int week = day / 7;
-        for (int i = week * 7; i < (week + 1); i++) {
-            if (solution[employee][i] != 0) {
-                count = count + shifts[solution[employee][i] - 1].getDuration(day % 7);
-            }
-        }
-        return count;
-    }
-    public static boolean checkHC2(int [][] solution ){
-        for (int i=0; i<plannedHorizon[selectedFile-1]*7; i++){
-            for (int j=0; j<manpowers.length; j++){
-                if (manpowers[j].getShiftNeeded(i%7)!= needs(solution, j+1, i))
+public static boolean checkHC7 (int [][] solution){
+        for (int i=0;i< plannedHorizon[selectedFile-1]*7; i++){
+            for (int j=0; j< employees.length; j++){
+                if (sumTotals(solution, i,j) > constraints.getHc7()) {
                     return false;
+                }
             }
         }
     return true;
     }
-    public static boolean checkHC3 (int [][] solution){
-        double [] hourWork = averageWorkHour(solution, plannedHorizon[selectedFile-1]).clone();
-        for (int i = 0; i < hourWork.length; i++) {
-            if (hourWork[i] > hourLimit[i][2])
-                return false;
-            if (hourWork[i] < hourLimit[i][0])
-                return false;
-        }
-        return true;
+
+    // Menyimpan solusi ke .txt
+    public static void savingSolution (int [][] solution, int number) throws IOException {
+        FileWriter savedSol = new FileWriter("D:\\Kuliah!\\Semester 8\\TA\\Solution\\OpTur" + selectedFile + ".txt", false);
+   for (int i=0; i <solution.length; i++){
+       for (int j=0; j<solution[i].length;j++){
+           savedSol.write(solution[i][j] + " ");
+       }
+       savedSol.write("\n");
+   }
+   savedSol.close();
     }
-    public static boolean checkHC4Com (int [][] solution) {
+    public static void savingShiftSol (int [][] solution, int number ) throws IOException {
+        FileWriter savedShiftSol = new FileWriter("D:\\Kuliah!\\Semester 8\\TA\\Solution\\Shifts OpTur" + selectedFile + ".txt", false);
         for (int i = 0; i < solution.length; i++) {
             for (int j = 0; j < solution[i].length; j++) {
-                if (solution[i][j] != 0) {
-                    if (shifts[solution[i][j] - 1].getCompetence().equals("A") && employees[i].getCompetence().equals("")) {
-                        return false;
-                    }
-                }
-            }
+                if (solution[i][j] != 0)
+                    savedShiftSol.write(shifts[solution[i][j]-1].getShiftName() + " ");
+                else
+                    savedShiftSol.write("<Free>" + " ");
+            } savedShiftSol.write("\n");
         }
+        savedShiftSol.close();
     }
+
+    public static void savingOptimizedSol (int [][] solution, int number) throws IOException {
+        FileWriter savedOptSol = new FileWriter("D:\\Kuliah!\\Semester 8\\TA\\Solution\\Optimasi SAGD OpTur" + selectedFile + ".txt", false);
+        for (int i=0; i <solution.length; i++){
+            for (int j=0; j<solution[i].length;j++){
+                savedOptSol.write(solution[i][j] + " ");
+            }
+            savedOptSol.write("\n");
+        }
+        savedOptSol.close();
+    }
+
+
 
 
     @NotNull
