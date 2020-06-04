@@ -198,21 +198,117 @@ public class Solution {
 
     }
     private double penaltySC6() {
-    double penalty6 = 0;
+    double penaltySc6 = 0;
+        if (Main.constraints.getSc6()) {
+            for (int i = 0; i < Main.employees.length; i++) {
+                double hour = (Main.hourLimit[i][1]) * (Main.plannedHorizon[(Main.selectedFile - 1)]);
+                double workingHour = 0;
+                for (int j = 0; j < Main.plannedHorizon[(Main.selectedFile - 1)] * 7; j++) {
+                    if (solution[i][j] != 0)
+                        workingHour = workingHour + Main.shifts[solution[i][j]-1].getDuration(j % 7);
+                }
+                hour = hour - workingHour;
+                penaltySc6 = penaltySc6 + (hour*hour);
+            }
+            penaltySc6 = Math.sqrt(penaltySc6);
+        }
+        return penaltySc6;
 
 
     }
     private double penaltySC7() {
-        double penalty7 = 0;
-    }
-    private double penaltySC8() {
-        double penalty8 = 0;
-    }
-    private double penaltySC9() {
-        double penalty9 = 0;
+        double penaltySc7 = 0;
+        if (Main.constraints.getSc7()) {
+            for (int i = 0; i <Main.employees.length; i++) {
+                int count = 0;
+                for (int j = 0; j < (Main.plannedHorizon[(Main.selectedFile - 1)] * 7)-1; j++) {
+                    if (solution[i][j] != 0 && solution[i][j+1] == 0)
+                        count++;
+                }
+                penaltySc7 = penaltySc7 + (count*count);
+            }
+            penaltySc7 = Math.sqrt(penaltySc7);
+        }
+        return penaltySc7;
     }
 
-//public void GD(){
+    private double penaltySC8() {
+        double penaltySc8 = 0;
+        int day = (Main.plannedHorizon[(Main.selectedFile - 1)] * 7);
+        int employee = Main.employees.length;
+        if (Main.constraints.getSc8()!= 0) {
+            penaltySc8 = (double) employee * day;
+            for (int i = 0; i < employee; i++) {
+                for (int j = 0; j < day; j++) {
+                    for (int k = 0; k < Main.thePattern.length; k++) {
+                        if (day % 7 == Main.thePattern[k].startDay) {
+                            if (solution[i][j] != 0) {
+                                if (Main.shifts[solution[i][j]-1].getShiftName().equals(Main.thePattern[k].shiftPattern[0])) {
+                                    if (j <= day - (Main.thePattern[k].shiftPattern.length)) {
+                                        int count = Main.thePattern[k].shiftPattern.length;
+                                        for (int l = 0; l < Main.thePattern[k].shiftPattern.length; l++) {
+                                            if (solution[i][j+l] != 0) {
+                                                if (Main.shifts[solution[i][j + l] - 1].getShiftName().equals(Main.thePattern[k].shiftPattern[l])) {
+                                                    count--;
+                                                }
+                                            }
+                                            else {
+                                                if (Main.thePattern[k].shiftPattern[l].equals("<Free>")) {
+                                                    count--;
+                                                }
+                                            }
+                                        }
+                                        if (count == 0)
+                                            penaltySc8 = penaltySc8 - 1;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return penaltySc8;
+    }
+    private double penaltySC9() {
+        double penaltySc9 = 0;
+        int day = (Main.plannedHorizon[(Main.selectedFile - 1)] * 7);
+        int employee = Main.employees.length;
+        if (Main.constraints.getSc9()!= 0) {
+            for (int i = 0; i < employee; i++) {
+                for (int j = 0; j < day; j++) {
+                    for (int k = 0; k < Main.notPattern.length; k++) {
+                        if (day % 7 == Main.notPattern[k].startDay) {
+                            if (solution[i][j] != 0) {
+                                if (Main.shifts[solution[i][j]-1].getShiftName().equals(Main.notPattern[k].shiftPattern[0])) {
+                                    if (j <= day - (Main.notPattern[k].shiftPattern.length)) {
+                                        int count = Main.notPattern[k].shiftPattern.length;
+                                        for (int l = 0; l < Main.notPattern[k].shiftPattern.length; l++) {
+                                            if (solution[i][j+l] != 0) {
+                                                if (Main.shifts[solution[i][j + l] - 1].getShiftName().equals(Main.notPattern[k].shiftPattern[l])) {
+                                                    count--;
+                                                }
+                                            }
+                                            else {
+                                                if (Main.notPattern[k].shiftPattern[l].equals("<Free")) {
+                                                    count--;
+                                                }
+                                            }
+                                        }
+                                        if (count == 0)
+                                            penaltySc9 = penaltySc9 - 1;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return penaltySc9;
+    }
+
+//public void GreatDeluge(){
 //
 //}
 
