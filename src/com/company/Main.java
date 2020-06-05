@@ -414,10 +414,24 @@ public class Main {
                     matrix_solution[randomEmp][i] = shift;
             }
         }
+        int count = countHC6(matrix_solution);
+        System.out.println(count);
+        //tempSol = temporary solution matrix
+        int [][] tempMatrixSol = new int [employees.length] [plannedHorizon[selectedFile-1]*7]];
+        cloneArray(matrix_solution, tempMatrixSol);
+        double hour_solution =
     }
 
     public static void optimizedSolution() {
 
+    }
+
+    public static void cloneArray (int[][] solution, int[][] tempSolution){
+        for (int i = 0; i < tempSolution.length; i++) {
+            for (int j = 0; j < tempSolution[i].length; j++) {
+                tempSolution[i][j] = solution[i][j];
+            }
+        }
     }
 
     public static void print(int[][] printAll) {
@@ -644,6 +658,14 @@ public class Main {
         }
         return count;
     }
+//    public static double hourDifference (int [][] solution){
+//        double hour = 0;
+//        double[] startHour = averageWorkHour(solution, plannedHorizon[selectedFile-1]).clone();
+//        for (int i=0; i < startHour.length;i++){
+//            hour = hour + (double)(Math.abs(startHour-hourLimit[i][diff]))
+//
+//        }
+//    }
 
     public static boolean assignHC2(int[][] solution, int day, int shift, int employee) {
         if (manpowers[shift - 1].getShiftNeeded(day % 7) > needs(solution, shift, day))
@@ -888,6 +910,26 @@ public static boolean checkHC5 (int [][] solution){
             }
         }
         return true;
+    }
+    public static int countHC6 (int [][] solution) {
+        int count = 0;
+        boolean [][] check = new boolean[employees.length][plannedHorizon[selectedFile-1]];
+        for (int i = 0; i < plannedHorizon[selectedFile-1]; i++) {
+            boolean [] check2 = checkFreeWeekend(solution, i).clone(); {
+                for (int j = 0; j < check2.length; j++) {
+                    check[j][i] = check2[j];
+                }
+            }
+        }
+
+        for (int i = 0; i < check.length; i++) {
+            for (int j = 0; j < check[i].length; j++) {
+                if (check[i][j] == false) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
 public static boolean checkHC7 (int [][] solution){
