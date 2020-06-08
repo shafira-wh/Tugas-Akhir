@@ -394,7 +394,7 @@ public class Main {
     }
 
     //initsol();
-    public static void initialSolution() {
+    public static void initialSolution() throws IOException {
         int[][] matrix_solution = new int[employees.length][plannedHorizon[selectedFile - 1] * 7];
         for (int i = 0; i < matrix_solution.length; i++)
             for (int j = 0; j < matrix_solution[i].length; j++)
@@ -429,7 +429,7 @@ public class Main {
         int count = countHC6(matrix_solution);
         System.out.println(count);
         //tempSol = temporary solution matrix
-        int [][] tempMatrixSol = new int [employees.length] [plannedHorizon[selectedFile-1]*7]];
+        int [][] tempMatrixSol = new int [employees.length] [plannedHorizon[selectedFile-1]*7];
         cloneArray(matrix_solution, tempMatrixSol);
         double hour_solution = hourDifference(matrix_solution);
         for (int i =0; i<10000;i++){
@@ -474,7 +474,23 @@ public class Main {
             }
             System.out.println("Pada iterasi ke " + (i+1) + " " + hour_solution);
         }
+
+
+         if(checkAllHc(matrix_solution)==0) {
+        Solution solution = new Solution(matrix_solution);
+        print(matrix_solution);
+        System.out.println("Nilai penalti pada solusi = " + solution.totalPenalty());
+        System.out.println("1. Simpan \n 2. Tidak Simpan");
+        int save = input.nextInt();
+        if (save ==  1) {
+            savingSolution(matrix_solution, selectedFile);
+            savingShiftSol(matrix_solution,selectedFile);
+
         }
+    }
+        else {
+        System.out.println("Hard Constraint ke- " + checkAllHc(matrix_solution) + "tidak feasible");
+    }
     }
 
     public static void optimizedSolution() {
