@@ -31,6 +31,7 @@ public class Main {
     public static int selectedProcess;
     public static int selectedFile;
     public static int[] plannedHorizon;
+    public static int diff;
 
     public static String optimizedPath;
 
@@ -60,6 +61,17 @@ public class Main {
         String[] readConstraint = sheetConstraint().clone();
         wantedPattern = sheetWanted().clone();
         unwantedPattern = sheetUnwanted().clone();
+
+//diff hour
+        if (selectedFile==7) {
+            diff = 2;
+        }
+        if (selectedFile ==3){
+            diff =1 ;
+        }
+        if (selectedFile != 7  && selectedFile != 3) {
+            diff = 1;
+        }
 
 
         // Objek Employee
@@ -419,7 +431,50 @@ public class Main {
         //tempSol = temporary solution matrix
         int [][] tempMatrixSol = new int [employees.length] [plannedHorizon[selectedFile-1]*7]];
         cloneArray(matrix_solution, tempMatrixSol);
-        double hour_solution =
+        double hour_solution = hourDifference(matrix_solution);
+        for (int i =0; i<10000;i++){
+            int llh = (int) (Math.random()*3);
+            if(llh == 0)
+                exchangeTwo(tempMatrixSol);
+            if(llh == 1)
+                exchangeThree(tempMatrixSol);
+            if(llh == 2)
+                double2Exchange(tempMatrixSol);
+            if(checkHC4Com(tempMatrixSol))
+            {
+                if(checkHC5(tempMatrixSol))
+                {
+                    if(checkHC7(tempMatrixSol))
+                    {
+                        if(hourDifference(tempMatrixSol)<= hour_solution)
+                        {
+                            if (countHC6(tempMatrixSol) <= count) {
+                                cloneArray(tempMatrixSol, matrix_solution);
+                                count = countHC6(tempMatrixSol);
+                                hour_solution = hourDifference(tempMatrixSol);
+                            }
+                            else {
+                                cloneArray(matrix_solution, tempMatrixSol);
+                            }
+                        }
+                        else {
+                            cloneArray(matrix_solution,tempMatrixSol);
+                        }
+                    }
+                    else {
+                        cloneArray(matrix_solution, tempMatrixSol);
+                    }
+                }
+                else {
+                    cloneArray(matrix_solution, tempMatrixSol);
+                }
+            }
+            else {
+                cloneArray(matrix_solution, tempMatrixSol);
+            }
+            System.out.println("Pada iterasi ke " + (i+1) + " " + hour_solution);
+        }
+        }
     }
 
     public static void optimizedSolution() {
@@ -475,7 +530,7 @@ public class Main {
         return 0;
 
     }
-
+// Low Level Heuristic 1
     public static void exchangeTwo(int[][] solution) {
         int randomDay = -1;
         do {
@@ -498,7 +553,7 @@ public class Main {
         solution[randomEmp1][randomDay] = solution[randomEmp2][randomDay];
         solution[randomEmp2][randomDay] = shiftExchange;
     }
-
+    // Low Level Heuristic 2
     public static void exchangeThree(int[][] solution) {
         int randomDay = (int) (Math.random() * plannedHorizon[selectedFile - 1] * 7);
         int randomEmp1 = -1;
@@ -520,7 +575,7 @@ public class Main {
         solution[randomEmp2][randomDay] = solution[randomEmp3][randomDay];
         solution[randomEmp3][randomDay] = shiftExchange;
     }
-
+    // Low Level Heuristic 3
     public static void double2Exchange(int[][] solution) {
         int randomEmp1 = -1;
         int randomEmp2 = -1;
@@ -658,14 +713,16 @@ public class Main {
         }
         return count;
     }
-//    public static double hourDifference (int [][] solution){
-//        double hour = 0;
-//        double[] startHour = averageWorkHour(solution, plannedHorizon[selectedFile-1]).clone();
-//        for (int i=0; i < startHour.length;i++){
-//            hour = hour + (double)(Math.abs(startHour-hourLimit[i][diff]))
-//
-//        }
-//    }
+
+    public static double hourDifference (int [][] solution){
+        double hour = 0;
+        double[] startHour = averageWorkHour(solution, plannedHorizon[selectedFile-1]).clone();
+        for (int i=0; i < startHour.length;i++){
+            hour = hour + (double)(Math.abs(startHour[i]-hourLimit[i][diff]));
+
+        }
+        return hour;
+    }
 
     public static boolean assignHC2(int[][] solution, int day, int shift, int employee) {
         if (manpowers[shift - 1].getShiftNeeded(day % 7) > needs(solution, shift, day))
