@@ -474,6 +474,69 @@ public class Main {
             }
             System.out.println("Pada iterasi ke " + (i+1) + " " + hour_solution);
         }
+        //
+        if(checkHC2(matrix_solution))
+        {
+            if(checkHC3(matrix_solution))
+            {
+                if(checkHC4Com(matrix_solution))
+                {
+                    if(checkHC5(matrix_solution))
+                    {
+                        if(checkHC6(matrix_solution))
+                        {
+                            if(checkHC7(matrix_solution))
+                            {
+                            }
+                            else {
+                                int[][] temporarySolMat = new int[employees.length][plannedHorizon[selectedFile-1]*7];
+                                cloneArray(matrix_solution, temporarySolMat);
+
+                                int iterate = 0;
+                                do {
+                                    System.out.println("Iterasi ke " + (iterate + 1) + " pada do while");
+                                    iterate++;
+                                    int llh = (int) (Math.random() * 3);
+//                                    System.out.println("sudah sampek sini" + llh);
+                                    if (llh == 0)
+                                        exchangeTwo(temporarySolMat);
+                                    if (llh == 1)
+                                        exchangeThree(temporarySolMat);
+                                    if (llh == 2)
+                                        double2Exchange(temporarySolMat);
+                                    //System.out.println("sudah sampek sini");
+                                    if (checkHC3(temporarySolMat)) {
+                                        if (checkHC4Com(temporarySolMat)) {
+                                            if (checkHC5(temporarySolMat)) {
+//                                                if (checkHC7(matrixsolTemp2)) {
+                                                if (countHC6(temporarySolMat) <= count) {
+                                                    count = countHC6(temporarySolMat);
+                                                    cloneArray(temporarySolMat, matrix_solution);
+                                                } else
+                                                    cloneArray(matrix_solution, temporarySolMat);
+                                            } else
+                                                cloneArray(matrix_solution, temporarySolMat);
+                                        } else
+                                            cloneArray(matrix_solution, temporarySolMat);
+                                    } else
+                                        cloneArray(matrix_solution, temporarySolMat);
+                                } while (!checkHC6(matrix_solution));
+                            }
+                        }
+                        else
+                            System.out.println("hc 7 tidak feasible");
+                    }
+                    else
+                        System.out.println("hc5 tidak feasible");
+                }
+                else
+                    System.out.println("hc4 tidak feasible");
+            }
+            else
+                System.out.println("hc3 tidak feasible");
+        }
+        else
+            System.out.println("hc 2 tidak feasible");
 
 
          if(checkAllHc(matrix_solution)==0) {
