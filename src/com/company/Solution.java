@@ -2,8 +2,11 @@ package com.company;
 
 import com.sun.org.apache.xerces.internal.dom.PSVIElementNSImpl;
 
+import java.io.IOException;
+import java.text.ParseException;
+
 public class Solution {
-    public int[][] solution;
+        public int[][] solution;
 
     public Solution(int[][] probSolution) {
         probSolution = solution;
@@ -88,21 +91,21 @@ public class Solution {
                 if (Main.constraints.getSc3_1() != 0) {
                     day = (Main.plannedHorizon[(Main.selectedFile - 1)] * 7) - (Main.constraints.getSc3_1());
                 } else
-                    continue;;
+                    continue;
             }
             if (i == 1) {
                 softCons = Main.constraints.getSc3_2();
                 if (Main.constraints.getSc3_2() != 0) {
                     day = (Main.plannedHorizon[(Main.selectedFile - 1)] * 7) - (Main.constraints.getSc3_2());
                 } else
-                    continue;;
+                    continue;
             }
             if (i == 2) {
                 softCons = Main.constraints.getSc3_3();
                 if (Main.constraints.getSc3_3() != 0) {
                     day = (Main.plannedHorizon[(Main.selectedFile - 1)] * 7) - (Main.constraints.getSc3_3());
                 } else
-                    continue;;
+                    continue;
             }
             for (int j = 0; j < Main.employees.length; j++) {
                 for (int k = 0; k < day; k++) {

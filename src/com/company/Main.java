@@ -32,6 +32,7 @@ public class Main {
     public static int selectedFile;
     public static int[] plannedHorizon;
     public static int diff;
+    public static int plannedDay;
 
     public static String optimizedPath;
 
@@ -46,7 +47,7 @@ public class Main {
         selectedProcess = input.nextInt();
 
         for (int i = 0; i < 7; i++) {
-            System.out.println((i + 1) + ". Optur" + (i + 1));
+            System.out.println((i + 1) + ". OptTur" + (i + 1));
         }
 
         System.out.println("File terpilih :");
@@ -72,7 +73,16 @@ public class Main {
         if (selectedFile != 7  && selectedFile != 3) {
             diff = 1;
         }
-
+//planned horizon
+        if (selectedFile==7){
+            plannedDay = 42;
+        }
+        if (selectedFile==4){
+            plannedDay = 168;
+        }
+        if (selectedFile==5){
+            plannedDay = 28;
+        }
 
         // Objek Employee
 
@@ -395,12 +405,12 @@ public class Main {
 
     //initsol();
     public static void initialSolution() throws IOException {
-        int[][] matrix_solution = new int[employees.length][plannedHorizon[selectedFile - 1] * 7];
+        int[][] matrix_solution = new int[employees.length][plannedDay];
         for (int i = 0; i < matrix_solution.length; i++)
             for (int j = 0; j < matrix_solution[i].length; j++)
                 matrix_solution[i][j] = 0;
 
-        for (int i = 5; i < plannedHorizon[selectedFile - 1] * 7; i = i + 7) {
+        for (int i = 5; i < plannedDay; i = i + 7) {
             while (!validDay(matrix_solution, i)) {
                 int shift = isMissing(matrix_solution, i);
                 int randomEmp = (int) (Math.random() * employees.length);
@@ -408,7 +418,7 @@ public class Main {
                     matrix_solution[randomEmp][i] = shift;
             }
         }
-        for (int i = 6; i < plannedHorizon[selectedFile - 1] * 7; i = i + 7) {
+        for (int i = 6; i < plannedDay; i = i + 7) {
             while (!validDay(matrix_solution, i)) {
                 int shift = isMissing(matrix_solution, i);
                 int randomEmp = (int) (Math.random() * employees.length);
@@ -416,7 +426,7 @@ public class Main {
                     matrix_solution[randomEmp][i] = shift;
             }
         }
-        for (int i = 0; i < plannedHorizon[selectedFile - 1] * 7; i++) {
+        for (int i = 0; i < plannedDay; i++) {
             if (i % 7 == 5 || i % 7 == 6)
                 continue;
             while (!validDay(matrix_solution, i)) {
@@ -429,7 +439,7 @@ public class Main {
         int count = countHC6(matrix_solution);
         System.out.println(count);
         //tempSol = temporary solution matrix
-        int [][] tempMatrixSol = new int [employees.length] [plannedHorizon[selectedFile-1]*7];
+        int [][] tempMatrixSol = new int [employees.length] [plannedDay];
         cloneArray(matrix_solution, tempMatrixSol);
         double hour_solution = hourDifference(matrix_solution);
         for (int i =0; i<10000;i++){
@@ -489,7 +499,7 @@ public class Main {
                             {
                             }
                             else {
-                                int[][] temporarySolMat = new int[employees.length][plannedHorizon[selectedFile-1]*7];
+                                int[][] temporarySolMat = new int[employees.length][plannedDay];
                                 cloneArray(matrix_solution, temporarySolMat);
 
                                 int iterate = 0;
@@ -613,7 +623,7 @@ public class Main {
     public static void exchangeTwo(int[][] solution) {
         int randomDay = -1;
         do {
-            randomDay = (int) (Math.random() * plannedHorizon[selectedFile - 1] * 7);
+            randomDay = (int) (Math.random() * plannedDay);
         } while (randomDay % 7 == 5 || randomDay % 7 == 6);
 
         int randomEmp1 = -1;
@@ -634,7 +644,7 @@ public class Main {
     }
     // Low Level Heuristic 2
     public static void exchangeThree(int[][] solution) {
-        int randomDay = (int) (Math.random() * plannedHorizon[selectedFile - 1] * 7);
+        int randomDay = (int) (Math.random() * plannedDay);
         int randomEmp1 = -1;
         int randomEmp2 = -1;
         int randomEmp3 = -1;
@@ -662,8 +672,8 @@ public class Main {
         int randomDay2 = -1;
         while (randomEmp1 == -1 || randomEmp2 == -1) {
             do {
-                randomDay1 = (int) (Math.random() * plannedHorizon[selectedFile - 1] * 7);
-                randomDay2 = (int) (Math.random() * plannedHorizon[selectedFile - 1] * 7);
+                randomDay1 = (int) (Math.random() * plannedDay);
+                randomDay2 = (int) (Math.random() * plannedDay);
             } while (randomDay1 % 7 == 5 || randomDay1 % 7 == 6 || randomDay2 % 7 == 5 || randomDay2 % 7 == 6);
             for (int i = 0; i < employees.length; i++) {
                 for (int j = 0; j < employees.length; j++) {
@@ -845,7 +855,7 @@ public class Main {
                 if (solution[employee][day - 1] == shiftWend[i][0] && shift == shiftWend[i][1]) {
                     return false;
                 }
-                if (day < (plannedHorizon[selectedFile - 1] * 7) - 1) {
+                if (day < (plannedDay) - 1) {
                     if (solution[employee][day + 1] == shiftWend[i][1] && shift == shiftWend[i][0])
                         return false;
                 }
@@ -857,7 +867,7 @@ public class Main {
                 if (solution[employee][day - 1] == shiftWday[i][0] && shift == shiftWday[i][1]) {
                     return false;
                 }
-                if (day < (plannedHorizon[selectedFile - 1] * 7) - 1) ;
+                if (day < (plannedDay) - 1) ;
                 {
                     if (solution[employee][day + 1] == shiftWday[i][1] && shift == shiftWday[i][0])
                         return false;
@@ -960,7 +970,7 @@ public class Main {
     }
 
     public static boolean checkHC2(int[][] solution) {
-        for (int i = 0; i < plannedHorizon[selectedFile - 1] * 7; i++) {
+        for (int i = 0; i < plannedDay; i++) {
             for (int j = 0; j < manpowers.length; j++) {
                 if (manpowers[j].getShiftNeeded(i % 7) != needs(solution, j + 1, i))
                     return false;
@@ -993,7 +1003,7 @@ public class Main {
         return true;
     }
 public static boolean checkHC4Weekend (int [][] solution, int employee) {
-    for (int i = 0; i < plannedHorizon[selectedFile - 1] * 7; i++) {
+    for (int i = 0; i < plannedDay; i++) {
         if (i % 7 == 5 || i % 7 == 6) {
             if (solution[employee][i] != 0) {
                 for (int j = 0; j < employees[employee].getWorkWeekend().length; j++) {
@@ -1007,18 +1017,18 @@ public static boolean checkHC4Weekend (int [][] solution, int employee) {
     return true;
 }
 public static boolean checkHC5 (int [][] solution){
-    for (int i = 0; i < plannedHorizon[selectedFile-1]*7; i++) {
+    for (int i = 0; i < plannedDay; i++) {
         for (int j = 0; j < employees.length; j++) {
             if (i % 7 != 5 || i % 7 != 6) {
                 for (int a = 0; a < shiftWday.length; a++) {
-                    if (i < (plannedHorizon[selectedFile-1]*7) - 1)
+                    if (i < (plannedDay) - 1)
                         if (solution[j][i] == shiftWday[a][0] && solution[j][(i+1)] == shiftWday[a][1])
                             return false;
                 }
             }
             else {
                 for (int a = 0; a < shiftWend.length; a++) {
-                    if (i < (plannedHorizon[selectedFile-1]*7) - 1)
+                    if (i < (plannedDay) - 1)
                         if (solution[j][i] == shiftWend[a][0] && solution[j][(i+1)] ==  shiftWend[a][1])
                             return false;
                 }
@@ -1069,7 +1079,7 @@ public static boolean checkHC5 (int [][] solution){
     }
 
 public static boolean checkHC7 (int [][] solution){
-        for (int i=0;i< plannedHorizon[selectedFile-1]*7; i++){
+        for (int i=0;i< plannedDay; i++){
             for (int j=0; j< employees.length; j++){
                 if (sumTotals(solution, i,j) > constraints.getHc7()) {
                     return false;
@@ -1113,8 +1123,6 @@ public static boolean checkHC7 (int [][] solution){
         }
         savedOptSol.close();
     }
-
-
 
 
     @NotNull
@@ -1297,7 +1305,7 @@ public static boolean checkHC7 (int [][] solution){
         int mendatar = 0;
         int menurun = 0;
         int mendatarfix = 0;
-        for (int i = 4; i <= sheet.getLastRowNum(); i++) {
+        for (int i = 4; i <= 12; i++) {
             row = sheet.getRow(i);
             Iterator<Cell> cellIterator = row.cellIterator();
 
@@ -1314,11 +1322,11 @@ public static boolean checkHC7 (int [][] solution){
         }
         String [][] dataWanted = new String[menurun][mendatarfix];
         menurun = 0;
-        for (int i = 4; i <= sheet.getLastRowNum(); i++) {
+        for (int i = 4; i <= 12; i++) {
             row = sheet.getRow(i);
             for (Cell cell : row) {
                 String cellValue = dataFormat.formatCellValue(cell);
-                dataWanted[menurun][mendatarfix] = cellValue;
+                dataWanted[menurun][mendatar] = cellValue;
                 mendatar++;
             }
             mendatar = 0;
@@ -1368,7 +1376,7 @@ public static boolean checkHC7 (int [][] solution){
             row = sheet.getRow(i);
             for (Cell cell : row) {
                 String cellValue = dataFormat.formatCellValue(cell);
-                dataUnwanted[menurun][mendatarfix] = cellValue;
+                dataUnwanted[menurun][mendatar] = cellValue;
                 mendatar++;
             }
             mendatar = 0;

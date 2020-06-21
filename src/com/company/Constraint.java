@@ -157,10 +157,10 @@ public class Constraint {
     //SOFT CONSTRAINT
 
     public void setSc1_1(){
-        if (consValue[0].equals("N/A"))
-            sc1_1=0;
+        if (consValue[14].equals("N/A"))
+            sc1_1 = 0;
         else
-            sc1_1=Integer.parseInt(consValue[0]);
+            sc1_1 = Integer.parseInt(consValue[14]);
     }
 
     public int getSc1_1() {
@@ -168,10 +168,10 @@ public class Constraint {
     }
 
     public void setSc1_2() {
-        if (consValue[1].equals("N/A"))
+        if (consValue[15].equals("N/A"))
             sc1_2 = 0;
         else
-            sc1_2 = Integer.parseInt(consValue[1]);
+            sc1_2 = Integer.parseInt(consValue[15]);
     }
 
     public int getSc1_2() {
@@ -179,10 +179,10 @@ public class Constraint {
     }
 
     public void setSc1_3() {
-        if (consValue[2].equals("N/A"))
+        if (consValue[16].equals("N/A"))
             sc1_3 = 0;
         else
-            sc1_3 = Integer.parseInt(consValue[2]);
+            sc1_3 = Integer.parseInt(consValue[16]);
     }
 
     public int getSc1_3() {
@@ -190,10 +190,10 @@ public class Constraint {
     }
 
     public void setSc2() {
-        if (consValue[3].equals("N/A"))
+        if (consValue[17].equals("N/A"))
             sc2 = 0;
         else
-            sc2 = Integer.parseInt(consValue[3]);
+            sc2 = Integer.parseInt(consValue[17]);
     }
 
     public int getSc2() {
@@ -201,10 +201,10 @@ public class Constraint {
     }
 
     public void setSc3_1() {
-        if (consValue[4].equals("N/A"))
+        if (consValue[18].equals("N/A"))
             sc3_1 = 0;
         else
-            sc3_1 = Integer.parseInt(consValue[4]);
+            sc3_1 = Integer.parseInt(consValue[18]);
     }
 
     public int getSc3_1() {
@@ -212,10 +212,10 @@ public class Constraint {
     }
 
     public void setSc3_2() {
-        if (consValue[5].equals("N/A"))
+        if (consValue[19].equals("N/A"))
             sc3_2 = 0;
         else
-            sc3_2 = Integer.parseInt(consValue[5]);
+            sc3_2 = Integer.parseInt(consValue[19]);
     }
 
     public int getSc3_2() {
@@ -223,10 +223,10 @@ public class Constraint {
     }
 
     public void setSc3_3() {
-        if (consValue[6].equals("N/A"))
+        if (consValue[20].equals("N/A"))
             sc3_3 = 0;
         else
-            sc3_3 = Integer.parseInt(consValue[6]);
+            sc3_3 = Integer.parseInt(consValue[20]);
     }
 
     public int getSc3_3() {
@@ -234,10 +234,10 @@ public class Constraint {
     }
 
     public void setSc4() {
-        if (consValue[7].equals("N/A"))
+        if (consValue[21].equals("N/A"))
             sc4 = 0;
         else
-            sc4 = Integer.parseInt(consValue[7]);
+            sc4 = Integer.parseInt(consValue[21]);
     }
 
     public int getSc4() {
@@ -245,10 +245,10 @@ public class Constraint {
     }
 
     public void setSc5_1Max() {
-        if (consValue[8].equals("N/A"))
+        if (consValue[22].equals("N/A"))
             sc5_1Max = 0;
         else
-            sc5_1Max = Integer.parseInt(consValue[8].substring(0,1));
+            sc5_1Max = Integer.parseInt(consValue[22].substring(0,1));
     }
 
     public int getSc5_1Max() {
@@ -256,10 +256,10 @@ public class Constraint {
     }
 
     public void setSc5_1Min() {
-        if (consValue[8].equals("N/A"))
+        if (consValue[22].equals("N/A"))
             sc5_1Min = 0;
         else
-            sc5_1Min = Integer.parseInt(consValue[8].substring(2,3));
+            sc5_1Min = Integer.parseInt(consValue[22].substring(2,3));
     }
 
     public int getSc5_1Min() {
@@ -267,10 +267,10 @@ public class Constraint {
     }
 
     public void setSc5_2Max() {
-        if (consValue[9].equals("N/A"))
+        if (consValue[23].equals("N/A"))
             sc5_2Max = 0;
         else
-            sc5_2Max = Integer.parseInt(consValue[9].substring(0,1));
+            sc5_2Max = Integer.parseInt(consValue[23].substring(0,1));
     }
 
     public int getSc5_2Max() {
@@ -278,10 +278,10 @@ public class Constraint {
     }
 
     public void setSc5_2Min() {
-        if (consValue[9].equals("N/A"))
+        if (consValue[23].equals("N/A"))
             sc5_2Min = 0;
         else
-            sc5_2Min = Integer.parseInt(consValue[8].substring(2,3));
+            sc5_2Min = Integer.parseInt(consValue[23].substring(2,3));
     }
 
     public int getSc5_2Min() {
@@ -289,10 +289,10 @@ public class Constraint {
     }
 
     public void setSc5_3Max() {
-        if (consValue[10].equals("N/A"))
+        if (consValue[24].equals("N/A"))
             sc5_3Max = 0;
         else
-            sc5_3Max = Integer.parseInt(consValue[10].substring(0,1));
+            sc5_3Max = Integer.parseInt(consValue[24].substring(0,1));
     }
 
     public int getSc5_3Max() {
@@ -300,10 +300,10 @@ public class Constraint {
     }
 
     public void setSc5_3Min() {
-        if (consValue[10].equals("N/A"))
+        if (consValue[24].equals("N/A"))
             sc5_3Min = 0;
         else
-            sc5_3Min = Integer.parseInt(consValue[10].substring(2,3));
+            sc5_3Min = Integer.parseInt(consValue[24].substring(2,3));
     }
 
     public int getSc5_3Min() {
@@ -311,9 +311,9 @@ public class Constraint {
     }
 
     public void setSc6(){
-        if(consValue[11].equals("N/A"))
+        if(consValue[25].equals("N/A"))
             sc6 = false;
-        if (consValue[11].equals("Yes"))
+        if (consValue[25].equals("Yes"))
             sc6 = true;
     }
 
@@ -322,9 +322,9 @@ public class Constraint {
     }
 
     public void setSc7(){
-        if(consValue[12].equals("N/A"))
+        if(consValue[26].equals("N/A"))
             sc7 = false;
-        if (consValue[12].equals("Yes"))
+        if (consValue[26].equals("Yes"))
             sc7 = true;
     }
     public boolean getSc7() {
@@ -332,10 +332,10 @@ public class Constraint {
     }
 
     public void setSc8(){
-        if(consValue[13].equals("N/A"))
+        if(consValue[27].equals("N/A"))
             sc8 = 0;
         else
-            sc8 = Integer.parseInt(consValue[13]);
+            sc8 = Integer.parseInt(consValue[27]);
     }
 
     public int getSc8() {
@@ -343,10 +343,10 @@ public class Constraint {
     }
 
     public void setSc9(){
-        if(consValue[14].equals("N/A"))
+        if(consValue[28].equals("N/A"))
             sc9 = 0;
         else
-            sc9 = Integer.parseInt(consValue[14]);
+            sc9 = Integer.parseInt(consValue[28]);
     }
 
     public int getSc9() {
