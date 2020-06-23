@@ -413,8 +413,8 @@ public class Main {
         }
         if (selectedProcess == 1)
             initialSolution();
-//        if (selectedProcess == 2) ;
-//        optimizedSolution();
+        if (selectedProcess == 2) ;
+        optimizedSolution();
 
     }
 
@@ -556,6 +556,28 @@ public class Main {
 
             }
         }
+        else {
+            System.out.println("HC" + checkAllHc(matrix_solution)+ "tidak feasible");
+        }
+    }
+
+    public static void optimizedSolution () throws IOException{
+        int [][] matrix_solution = new int [employees.length][plannedDay];
+        File fileOpt = new File(optimizedPath);
+
+        BufferedReader read = new BufferedReader(new FileReader(fileOpt));
+
+        String readline = "";
+        int index = 0;
+        while ((readline = read.readLine()) != null) {
+            String [] tmp = readline.split(" ");
+            for (int i = 0; i < matrix_solution[index].length; i++) {
+                matrix_solution[index][i] = Integer.parseInt(tmp[i]);
+            } index++;
+        }
+        Solution sol = new Solution(matrix_solution);
+        sol.SAGD();
+//        System.out.println(sol.countPenalty());
     }
 
     public static void cloneArray (int[][] solution, int[][] tempSolution){
@@ -565,6 +587,7 @@ public class Main {
             }
         }
     }
+
 
     public static void print(int[][] printAll) {
         for (int i = 0; i < printAll.length; i++) {
@@ -1004,14 +1027,18 @@ public static boolean checkHC7 (int [][] solution){
     public static void savingSolution (int [][] solution, int number) throws IOException {
         FileWriter savedSol = new FileWriter("D:\\Kuliah!\\Semester 8\\TA\\Solution\\OpTur" + selectedFile + ".txt", false);
 //        try (BufferedWriter savedSol = new BufferedWriter(new FileWriter(filePath))) {
-            for (int i = 0; i < solution.length; i++) {
-                for (int j = 0; j < solution[i].length; j++) {
-                    savedSol.write(solution[i][j] + " ");
-                }
-                savedSol.write("\n");
+        for (int i = 0; i < solution.length; i++) {
+            for (int j = 0; j < solution[i].length; j++) {
+                System.out.println(solution);
             }
-            savedSol.close();
+//                    savedSol.write(solution[i][j] + " ");
+//                }
+//                savedSol.write("\n");
+//            }
+//            savedSol.close();
         }
+    }
+
 
     public static void savingShiftSol (int [][] solution, int number ) throws IOException {
 

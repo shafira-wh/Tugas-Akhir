@@ -314,7 +314,6 @@ public class Solution {
         }
         return penaltySc9;
     }
-
     public void greatDeluge () throws IOException {
         for (int a = 0; a < 9; a++) {
             int day = Main.plannedDay;
@@ -323,13 +322,14 @@ public class Solution {
             int [][] bestSolution = new int [solution.length][day];
             double [][] boxplot = new double[101][2];
        // int p = 0;
-            int decayrate = 10;
-            int [] iteration = new int [1000000];
+
+            int iteration = 1000000;
             double newPenalty =  totalPenalty();
             double waterLevel = 0;
             double theBest = 0;
-
-            double penalty = totalPenalty();
+            double desiredValue = 0;
+            double decayrate = 0;
+//            (waterLevel-desiredValue)/iteration;
             Main.cloneArray(solution, newSolution);
             Main.cloneArray(solution, currentSolution);
             long startTime = System.nanoTime();
@@ -343,7 +343,7 @@ public class Solution {
                     case 2:
                         Main.double2Exchange(solution);
                 }
-                // Penjumlahan penalty
+
 
                 // Solusi lebih baik. untuk solusi lebih baik maka waterLevel sama dengan nilai solusi yang sekarang
                  if (totalPenalty() < newPenalty){
@@ -366,17 +366,28 @@ public class Solution {
                      Main.cloneArray(bestSolution, newSolution);
                      long gdBestTime = System.nanoTime();
                  }
-                     waterLevel = waterLevel-decayrate; // update waterlevel tiap iterasi
+                 //desired value
+                 desiredValue = 0.1 * totalPenalty();
 
+                 //skenariosasi 0.1, 0.3, 0.6, 0,9
+                 decayrate = (waterLevel-desiredValue)/iteration;
+                 waterLevel = waterLevel-decayrate; // update waterlevel tiap iterasi
 //                       }
-
      }
                 long endTime = System.nanoTime();
-                long time = (endTime-startTime)/1000000000 ;
+               // long time = (endTime-startTime)/ 1000000000 ;
                 Main.savingOptimizedSol(boxplot,a);
                 System.out.println("nilai terbaik " + theBest);
                 Main.cloneArray(bestSolution, solution);
         }
+    }
+
+    public void SAGD () throws IOException {
+        double desiredValue =0;
+        double decayrate = 0;
+        double waterLevel = 0;
+
+
     }
 }
 
