@@ -30,7 +30,7 @@ public class Main {
     public static Pattern[] notPattern;
     public static int selectedProcess;
     public static int selectedFile;
-    public static int[] plannedHorizon;
+    public static int [] plannedHorizon;
     public static int diff;
     public static int plannedDay;
 
@@ -39,7 +39,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException, ParseException {
 
-        System.out.println("Penjadwalan Perawat Dataset Benchmark Rumah Sakit di Norwegia)");
+        System.out.println("Penjadwalan Perawat Dataset Benchmark Rumah Sakit di Norwegia");
         System.out.println("1. Solusi Awal");
         System.out.println("2. Optimasi");
         System.out.println("Pilih proses yang diinginkan");
@@ -50,10 +50,14 @@ public class Main {
             System.out.println((i + 1) + ". OptTur" + (i + 1));
         }
 
-        System.out.println("File terpilih :");
+        System.out.println("Pilih file :");
         selectedFile = input.nextInt();
+        if (selectedProcess == 1 )
+        System.out.println("File yang terpilih adalah OpTur"+ selectedFile + " untuk proses pembuatan Solusi awal");
+        else
+            System.out.println("File yang terpilih adalah OpTur"+ selectedFile + " untuk Optimasi Solusi awal");
 
-        optimizedPath = "D:\\Kuliah!\\Semester 7\\PTA\\Nurse Rostering Data\\Optimasi\\ OpTur" + (selectedFile) + ".txt";
+        optimizedPath = "D:\\Kuliah!\\Semester 8\\TA\\ Optimized OpTur" + (selectedFile) + ".txt";
         filePath = "D:\\Kuliah!\\Semester 7\\PTA\\Nurse Rostering Data\\OpTur" + (selectedFile) + ".xls";
 
         String[][] readEmployee = sheetEmployee().clone();
@@ -73,17 +77,32 @@ public class Main {
         if (selectedFile != 7  && selectedFile != 3) {
             diff = 1;
         }
-//planned horizon
-        if (selectedFile==7){
+//planned horizon yang feasible sementara optur457
+        if (selectedFile== 1){
+            plannedDay = 84;
+        }
+        if (selectedFile== 2){
             plannedDay = 42;
         }
-        if (selectedFile==4){
+        if (selectedFile== 3){
+            plannedDay = 42;
+        }
+        if (selectedFile== 4){
             plannedDay = 168;
         }
         if (selectedFile==5){
             plannedDay = 28;
         }
+        if (selectedFile==6){
+            plannedDay = 84;
+        }
+        if (selectedFile== 7){
+            plannedDay = 42;
+        }
 
+
+ int [] plannedWeek = {12,6,6,24,4,12,6};
+        plannedHorizon = plannedWeek.clone();
         // Objek Employee
 
         employees = new Employee[readEmployee.length];
@@ -174,18 +193,10 @@ public class Main {
         // Read sheet4 Constraint
         constraints = new Constraint(readConstraint);
         //Hard Constraint
-        constraints.setHc1();
-        constraints.setHc2();
-        constraints.setHc3();
-        constraints.setHc4();
-        constraints.setHc5_1();
-        constraints.setHc5_2();
-        constraints.setHc5_3();
-        constraints.setHc5_4();
-        constraints.setHc5_5();
-        constraints.setHc5_6();
-        constraints.setHc6();
-        constraints.setHc7();
+        constraints.setHc1(); constraints.setHc2(); constraints.setHc3();
+        constraints.setHc4(); constraints.setHc5_1(); constraints.setHc5_2();
+        constraints.setHc5_3(); constraints.setHc5_4(); constraints.setHc5_5();
+        constraints.setHc5_6(); constraints.setHc6(); constraints.setHc7();
         //Soft Constraint
         constraints.setSc1_1();
         constraints.setSc1_2();
@@ -299,7 +310,7 @@ public class Main {
 
 // Pasangan Shift yang tidak boleh pada Weekday
         int count = 0;
-        for (int i = 0; i < shifts.length; i++)
+        for (int i = 0; i < shifts.length; i++) {
             for (int j = 0; j < shifts.length; j++) {
                 if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 2)
                     if (constraints.getHc5_1().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0)
@@ -311,9 +322,10 @@ public class Main {
                     // if (constraints.getHc5_5().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0)
                     count++;
             }
+        }
         shiftWday = new int[count][2];
         count = 0;
-        for (int i = 0; i < shifts.length; i++)
+        for (int i = 0; i < shifts.length; i++) {
             for (int j = 0; j < shifts.length; j++) {
                 if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 2)
                     if (constraints.getHc5_1().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0) {
@@ -334,9 +346,10 @@ public class Main {
                     count++;
                 }
             }
+            }
 // Pasangan Shift yang tidak boleh pada Weekend
         count = 0;
-        for (int i = 0; i < shifts.length; i++)
+        for (int i = 0; i < shifts.length; i++) {
             for (int j = 0; j < shifts.length; j++) {
                 if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 2)
                     if (constraints.getHc5_2().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0)
@@ -350,10 +363,11 @@ public class Main {
                     //  if (constraints.getHc5_6().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0)
                     count++;
             }
+        }
 
         shiftWend = new int[count][2];
         count = 0;
-        for (int i = 0; i < shifts.length; i++)
+        for (int i = 0; i < shifts.length; i++) {
             for (int j = 0; j < shifts.length; j++) {
                 if (shifts[i].getShiftCat() == 3 && shifts[j].getShiftCat() == 2)
                     if (constraints.getHc5_2().compareTo(shifts[j].getStartTime().minusHours(shifts[i].getEndTime().getHour()).minusMinutes(shifts[i].getEndTime().getMinute())) > 0) {
@@ -378,6 +392,7 @@ public class Main {
 
             }
 
+        }
         //        System.out.println("Pasangan shift tidak boleh Weekend");
 //        for (int i = 0; i < shiftWend.length; i++) {
 //            System.out.println(Arrays.toString(shiftWend[i]));
@@ -398,8 +413,8 @@ public class Main {
         }
         if (selectedProcess == 1)
             initialSolution();
-        if (selectedProcess == 2) ;
-        optimizedSolution();
+//        if (selectedProcess == 2) ;
+//        optimizedSolution();
 
     }
 
@@ -439,66 +454,50 @@ public class Main {
         int count = countHC6(matrix_solution);
         System.out.println(count);
         //tempSol = temporary solution matrix
-        int [][] tempMatrixSol = new int [employees.length] [plannedDay];
+        int[][] tempMatrixSol = new int[employees.length][plannedDay];
         cloneArray(matrix_solution, tempMatrixSol);
         double hour_solution = hourDifference(matrix_solution);
-        for (int i =0; i<10000;i++){
-            int llh = (int) (Math.random()*3);
-            if(llh == 0)
+        for (int i = 0; i < 10000; i++) {
+            int llh = (int) (Math.random() * 3);
+            if (llh == 0)
                 exchangeTwo(tempMatrixSol);
-            if(llh == 1)
+            if (llh == 1)
                 exchangeThree(tempMatrixSol);
-            if(llh == 2)
+            if (llh == 2)
                 double2Exchange(tempMatrixSol);
-            if(checkHC4Com(tempMatrixSol))
-            {
-                if(checkHC5(tempMatrixSol))
-                {
-                    if(checkHC7(tempMatrixSol))
-                    {
-                        if(hourDifference(tempMatrixSol)<= hour_solution)
-                        {
+            if (checkHC4Com(tempMatrixSol)) {
+                if (checkHC5(tempMatrixSol)) {
+                    if (checkHC7(tempMatrixSol)) {
+                        if (hourDifference(tempMatrixSol) <= hour_solution) {
                             if (countHC6(tempMatrixSol) <= count) {
                                 cloneArray(tempMatrixSol, matrix_solution);
                                 count = countHC6(tempMatrixSol);
                                 hour_solution = hourDifference(tempMatrixSol);
-                            }
-                            else {
+                            } else {
                                 cloneArray(matrix_solution, tempMatrixSol);
                             }
+                        } else {
+                            cloneArray(matrix_solution, tempMatrixSol);
                         }
-                        else {
-                            cloneArray(matrix_solution,tempMatrixSol);
-                        }
-                    }
-                    else {
+                    } else {
                         cloneArray(matrix_solution, tempMatrixSol);
                     }
-                }
-                else {
+                } else {
                     cloneArray(matrix_solution, tempMatrixSol);
                 }
-            }
-            else {
+            } else {
                 cloneArray(matrix_solution, tempMatrixSol);
             }
-            System.out.println("Pada iterasi ke " + (i+1) + " " + hour_solution);
+            System.out.println("Pada iterasi ke " + (i + 1) + " " + hour_solution);
         }
         //
-        if(checkHC2(matrix_solution))
-        {
-            if(checkHC3(matrix_solution))
-            {
-                if(checkHC4Com(matrix_solution))
-                {
-                    if(checkHC5(matrix_solution))
-                    {
-                        if(checkHC6(matrix_solution))
-                        {
-                            if(checkHC7(matrix_solution))
-                            {
-                            }
-                            else {
+        if (checkHC2(matrix_solution)) {
+            if (checkHC3(matrix_solution)) {
+                if (checkHC4Com(matrix_solution)) {
+                    if (checkHC5(matrix_solution)) {
+                        if (checkHC6(matrix_solution)) {
+                            if (checkHC7(matrix_solution)) {
+                            } else {
                                 int[][] temporarySolMat = new int[employees.length][plannedDay];
                                 cloneArray(matrix_solution, temporarySolMat);
 
@@ -532,42 +531,31 @@ public class Main {
                                         cloneArray(matrix_solution, temporarySolMat);
                                 } while (!checkHC6(matrix_solution));
                             }
-                        }
-                        else
+                        } else
                             System.out.println("hc 7 tidak feasible");
-                    }
-                    else
+                    } else
                         System.out.println("hc5 tidak feasible");
-                }
-                else
+                } else
                     System.out.println("hc4 tidak feasible");
-            }
-            else
+            } else
                 System.out.println("hc3 tidak feasible");
-        }
-        else
+        } else
             System.out.println("hc 2 tidak feasible");
 
 
-         if(checkAllHc(matrix_solution)==0) {
-        Solution solution = new Solution(matrix_solution);
-        print(matrix_solution);
-        System.out.println("Nilai penalti pada solusi = " + solution.totalPenalty());
-        System.out.println("1. Simpan \n 2. Tidak Simpan");
-        int save = input.nextInt();
-        if (save ==  1) {
-            savingSolution(matrix_solution, selectedFile);
-            savingShiftSol(matrix_solution,selectedFile);
+        if (checkAllHc(matrix_solution) == 0) {
+            Solution solution = new Solution(matrix_solution);
+            print(matrix_solution);
+            System.out.println("Nilai penalti pada solusi = " + solution.totalPenalty());
+            System.out.println("1. Simpan");
+            System.out.println("2. Batal");
+            int save = input.nextInt();
+            if (save == 1) {
+                savingSolution(matrix_solution, selectedFile);
+//            savingShiftSol(matrix_solution,selectedFile);
 
+            }
         }
-    }
-        else {
-        System.out.println("Hard Constraint ke- " + checkAllHc(matrix_solution) + "tidak feasible");
-    }
-    }
-
-    public static void optimizedSolution() {
-
     }
 
     public static void cloneArray (int[][] solution, int[][] tempSolution){
@@ -598,7 +586,6 @@ public class Main {
         for (int i = 0; i < manpowers.length; i++) {
             if (manpowers[i].getShiftNeeded(day % 7) != needs(solution, i + 1, day))
                 return false;
-
         }
         return true;
     }
@@ -691,22 +678,6 @@ public class Main {
         solution[randomEmp2][randomDay2] = 0;
     }
 
-    public static int plannedHorizon(int[][] weeklength) {
-        if ((weeklength.length == 0 || (weeklength[0].length == 0))) {
-            System.out.println("Empty Array");
-        }
-        int max = weeklength[0][0];
-        for (int i = 0; i < weeklength.length; i++) {
-            for (int j = 0; j < weeklength[i].length; i++) {
-                if (weeklength[i][j] > max) {
-                    max = weeklength[i][j];
-                }
-            }
-        }
-        return max;
-    }
-
-
     public static double[] allWorkHour(int[][] solution, int week) {
         double[] workhour_week = new double[15];
         for (int i = 0; i < 15; i++) {
@@ -732,66 +703,6 @@ public class Main {
         }
         return avg;
     }
-
-
-    // Membuat Matriks
-//    public static void initsol() {
-//        int[][] soltmatrix = new int[15][42];
-//
-//        // Assign Jadwal Weekend (5-6)
-//        for (int i = 0; i < 42; i++) {
-//            if (i % 7 == 5 || i % 7 == 6) {
-//                for (int j = 0; j < 15; j++) {
-//                    for (int a = 0; a < 6; a++) {
-//                        //Mengecek HC
-//                        if (checkHC2(soltmatrix, i, a, j)) {
-//                            if (checkHC4Com(a, j)) {
-//                                if (checkHC4Weekend(i, j)) {
-//                                    if (checkHC7(soltmatrix, i, a, j)) {
-//                                        if (checkHC5(soltmatrix, i, a + 1, j)) {
-//                                            soltmatrix[j][i] = a + 1;
-//                                            break;
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-////         Assign Jadwal Weekdays (0-4)
-//        for (int i = 0; i < 42; i++) {
-//            if (i % 7 == 0 || i % 7 == 1 || i % 7 == 2 || i % 7 == 3 || i % 7 == 4) {
-//                for (int j = 0; j < 15; j++) {
-//                    for (int a = 0; a < 6; a++) {
-//                        // Mengecek HC
-//                        if (checkHC2(soltmatrix, i, a, j)) {
-//                            if (checkHC4Com(a, j)) {
-//                                if (checkHC4Weekend(i, j)) {
-//                                    if (checkHC7(soltmatrix, i, a, j)) {
-//                                        if (checkHC5(soltmatrix, i, a + 1, j)) {
-//                                            soltmatrix[j][i] = a + 1;
-//                                            break;
-//                                        }
-//
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//
-//
-//        for (int i = 0; i < soltmatrix.length; i++) {
-//            for (int j = 0; j < soltmatrix[i].length; j++) {
-//                System.out.print(soltmatrix[i][j] + " ");
-//            }
-//            System.out.println("");
-//        }
-//    }
 
 
     public static int needs(int[][] solution, int shift, int day) {
@@ -1092,15 +1003,18 @@ public static boolean checkHC7 (int [][] solution){
     // Menyimpan solusi ke .txt
     public static void savingSolution (int [][] solution, int number) throws IOException {
         FileWriter savedSol = new FileWriter("D:\\Kuliah!\\Semester 8\\TA\\Solution\\OpTur" + selectedFile + ".txt", false);
-   for (int i=0; i <solution.length; i++){
-       for (int j=0; j<solution[i].length;j++){
-           savedSol.write(solution[i][j] + " ");
-       }
-       savedSol.write("\n");
-   }
-   savedSol.close();
-    }
+//        try (BufferedWriter savedSol = new BufferedWriter(new FileWriter(filePath))) {
+            for (int i = 0; i < solution.length; i++) {
+                for (int j = 0; j < solution[i].length; j++) {
+                    savedSol.write(solution[i][j] + " ");
+                }
+                savedSol.write("\n");
+            }
+            savedSol.close();
+        }
+
     public static void savingShiftSol (int [][] solution, int number ) throws IOException {
+
         FileWriter savedShiftSol = new FileWriter("D:\\Kuliah!\\Semester 8\\TA\\Solution\\Shifts OpTur" + selectedFile + ".txt", false);
         for (int i = 0; i < solution.length; i++) {
             for (int j = 0; j < solution[i].length; j++) {
@@ -1109,11 +1023,12 @@ public static boolean checkHC7 (int [][] solution){
                 else
                     savedShiftSol.write("<Free>" + " ");
             } savedShiftSol.write("\n");
+//            savedShiftSol.close();
         }
         savedShiftSol.close();
     }
 
-    public static void savingOptimizedSol (int [][] solution, int number) throws IOException {
+    public static void savingOptimizedSol (double [][] solution, int number) throws IOException {
         FileWriter savedOptSol = new FileWriter("D:\\Kuliah!\\Semester 8\\TA\\Solution\\Optimasi SAGD OpTur" + selectedFile + ".txt", false);
         for (int i=0; i <solution.length; i++){
             for (int j=0; j<solution[i].length;j++){
@@ -1396,9 +1311,7 @@ public static boolean checkHC7 (int [][] solution){
         }
         return unwanted;
     }
-
-
-
+//
 }
 
 
