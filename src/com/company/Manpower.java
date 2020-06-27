@@ -7,13 +7,13 @@ public class Manpower {
 
     public Manpower (String man_shift, int [] shift_needed , int id_man) {
         manShift = man_shift;
-    shiftNeeded = shift_needed;
+        shiftNeeded = shift_needed;
         idMan = id_man;
     }
 
     public String getManShift() {
         return manShift;
-}
+    }
 
     public int  getShiftNeeded(int i) {
         return shiftNeeded[i];

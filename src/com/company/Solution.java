@@ -9,7 +9,7 @@ public class Solution {
     public int[][] solution;
 
     public Solution(int[][] probSolution) {
-        probSolution = solution;
+        solution = probSolution;
     }
 
     public double totalPenalty() {
@@ -26,21 +26,22 @@ public class Solution {
             if (i == 0) {
                 softCons = Main.constraints.getSc1_1();
                 if (Main.constraints.getSc1_1() != 0) {
-                    day = (Main.plannedHorizon[(Main.selectedFile - 1)] * 7) - (Main.constraints.getSc1_1());
-                } else
+                    day = (Main.plannedDay) - (Main.constraints.getSc1_1());
+                }
+                else
                     continue;
             }
             if (i == 1) {
                 softCons = Main.constraints.getSc1_2();
                 if (Main.constraints.getSc1_2() != 0) {
-                    day = (Main.plannedHorizon[(Main.selectedFile - 1)] * 7) - (Main.constraints.getSc1_2());
+                    day = (Main.plannedDay) - (Main.constraints.getSc1_2());
                 } else
                     continue;
             }
             if (i == 2) {
                 softCons = Main.constraints.getSc1_3();
                 if (Main.constraints.getSc1_3() != 0) {
-                    day = (Main.plannedHorizon[(Main.selectedFile - 1)] * 7) - (Main.constraints.getSc1_3());
+                    day = (Main.plannedDay) - (Main.constraints.getSc1_3());
                 } else
                     continue;
             }
@@ -67,7 +68,7 @@ public class Solution {
         double penaltySc2 = 0;
         int softCons = Main.constraints.getSc2();
         if (softCons != 0) {
-            int day = (Main.plannedHorizon[Main.selectedFile - 1] * 7) - softCons;
+            int day = (Main.plannedDay) - softCons;
             for (int i = 0; i < Main.employees.length; i++) {
                 for (int j = 0; j < day; j++) {
                     int count = (softCons + 1);
@@ -91,21 +92,21 @@ public class Solution {
             if (i == 0) {
                 softCons = Main.constraints.getSc3_1();
                 if (Main.constraints.getSc3_1() != 0) {
-                    day = (Main.plannedHorizon[(Main.selectedFile - 1)] * 7) - (Main.constraints.getSc3_1());
+                    day = (Main.plannedDay) - (Main.constraints.getSc3_1());
                 } else
                     continue;
             }
             if (i == 1) {
                 softCons = Main.constraints.getSc3_2();
                 if (Main.constraints.getSc3_2() != 0) {
-                    day = (Main.plannedHorizon[(Main.selectedFile - 1)] * 7) - (Main.constraints.getSc3_2());
+                    day = (Main.plannedDay) - (Main.constraints.getSc3_2());
                 } else
                     continue;
             }
             if (i == 2) {
                 softCons = Main.constraints.getSc3_3();
                 if (Main.constraints.getSc3_3() != 0) {
-                    day = (Main.plannedHorizon[(Main.selectedFile - 1)] * 7) - (Main.constraints.getSc3_3());
+                    day = (Main.plannedDay) - (Main.constraints.getSc3_3());
                 } else
                     continue;
             }
@@ -139,7 +140,7 @@ public class Solution {
         double penaltySc4 = 0;
         int softCons = Main.constraints.getSc4();
         if (softCons != 0) {
-            int day = (Main.plannedHorizon[(Main.selectedFile - 1)] * 7) - softCons;
+            int day = (Main.plannedDay) - softCons;
             for (int i = 0; i < Main.employees.length; i++) {
                 for (int j = 0; j < day; j++) {
                     if (solution[i][j + 1] != 0 && solution[i][j] == 0) {
@@ -184,7 +185,7 @@ public class Solution {
 
             for (int j = 0; j < Main.employees.length; j++) {
                 int count = 0;
-                for (int k = 0; k < Main.plannedHorizon[(Main.selectedFile - 1)] * 7; k++) {
+                for (int k = 0; k < Main.plannedDay; k++) {
                     if (solution[j][k] != 0)
                         if (Main.shifts[solution[j][k] - 1].getShiftCat() == (i + 1))
                             count++;
@@ -210,7 +211,7 @@ public class Solution {
             for (int i = 0; i < Main.employees.length; i++) {
                 double hour = (Main.hourLimit[i][1]) * (Main.plannedHorizon[(Main.selectedFile - 1)]);
                 double workingHour = 0;
-                for (int j = 0; j < Main.plannedHorizon[(Main.selectedFile - 1)] * 7; j++) {
+                for (int j = 0; j < Main.plannedDay; j++) {
                     if (solution[i][j] != 0)
                         workingHour = workingHour + Main.shifts[solution[i][j] - 1].getDuration(j % 7);
                 }
@@ -220,8 +221,6 @@ public class Solution {
             penaltySc6 = Math.sqrt(penaltySc6);
         }
         return penaltySc6;
-
-
     }
 
     private double penaltySC7() {
@@ -229,7 +228,7 @@ public class Solution {
         if (Main.constraints.getSc7()) {
             for (int i = 0; i < Main.employees.length; i++) {
                 int count = 0;
-                for (int j = 0; j < (Main.plannedHorizon[(Main.selectedFile - 1)] * 7) - 1; j++) {
+                for (int j = 0; j < (Main.plannedDay) - 1; j++) {
                     if (solution[i][j] != 0 && solution[i][j + 1] == 0)
                         count++;
                 }
@@ -242,7 +241,7 @@ public class Solution {
 
     private double penaltySC8() {
         double penaltySc8 = 0;
-        int day = (Main.plannedHorizon[(Main.selectedFile - 1)] * 7);
+        int day = (Main.plannedDay);
         int employee = Main.employees.length;
         if (Main.constraints.getSc8() != 0) {
             penaltySc8 = (double) employee * day;
@@ -280,7 +279,7 @@ public class Solution {
 
     private double penaltySC9() {
         double penaltySc9 = 0;
-        int day = (Main.plannedHorizon[(Main.selectedFile - 1)] * 7);
+        int day = (Main.plannedDay);
         int employee = Main.employees.length;
         if (Main.constraints.getSc9() != 0) {
             for (int i = 0; i < employee; i++) {
@@ -314,80 +313,162 @@ public class Solution {
         }
         return penaltySc9;
     }
-    public void greatDeluge () throws IOException {
-        for (int a = 0; a < 9; a++) {
-            int day = Main.plannedDay;
-            int[][] newSolution = new int[solution.length][day];
-            int [][] currentSolution = new int[solution.length][day];
-            int [][] bestSolution = new int [solution.length][day];
-            double [][] boxplot = new double[101][2];
-       // int p = 0;
 
-            int iteration = 1000000;
-            double newPenalty =  totalPenalty();
-            double waterLevel = 0;
-            double theBest = 0;
-            double desiredValue = 0;
-            double decayrate = 0;
-//            (waterLevel-desiredValue)/iteration;
-            Main.cloneArray(solution, newSolution);
-            Main.cloneArray(solution, currentSolution);
-            long startTime = System.nanoTime();
-            for (int i = 0; i < 10000; i++){
-                int llh = (int) (Math.random() * 3);
-                switch (llh) {
-                    case 0:
-                        Main.exchangeTwo(solution);
-                    case 1:
-                        Main.exchangeThree(solution);
-                    case 2:
-                        Main.double2Exchange(solution);
+//    public void greatDeluge11() throws IOException {
+//        int day = Main.plannedDay;
+//        int[][] newSolution = new int[solution.length][day]; //best
+//      //  int[][] currentSolution = new int[solution.length][day]; // stemp
+//      //  int[][] bestSolution = new int[solution.length][day];// terbaik
+//        Main.cloneArray(solution, newSolution);
+//       // Main.cloneArray(solution, currentSolution);
+//      //  Main.cloneArray(solution, bestSolution);
+//        double bestPenalty = 0;
+//        double penalty = totalPenalty();
+//        int iteration = 1000000;
+//
+//        double waterLevel = 0;
+//        double desiredValue = 0.1 * totalPenalty();
+//        //skenariosasi alpha 0.1, 0.3, 0.6, 0,9
+//        double decayrate;
+//
+////            Rumus (waterLevel-desiredValue)/iteration;
+//        long startTime = System.nanoTime();
+//        for (int i = 0; i < iteration; i++) {
+//            int llh = (int) (Math.random() * 3);
+//            switch (llh) {
+//                case 0:
+//                    Main.exchangeTwo(solution);
+//                case 1:
+//                    Main.exchangeThree(solution);
+//                case 2:
+//                    Main.double2Exchange(solution);
+//            }
+//            if (Main.checkAllHc(solution) == 0) {
+//                // Solusi lebih baik. untuk solusi lebih baik maka waterLevel sama dengan nilai solusi yang sekarang
+//                if (totalPenalty () < penalty) {
+//                    penalty = totalPenalty();
+//                    waterLevel = totalPenalty();
+//                    Main.cloneArray(solution, newSolution); //copy solusinya
+//                }
+//                // Solusi lebih baik atau sama dengan
+//                else if (totalPenalty() <= waterLevel) {
+//                    penalty = totalPenalty();
+//                    Main.cloneArray(solution, newSolution); //copy solusinya juga
+//                }
+//                // Solusi lebih buruk, tidak diterima
+//                else {
+//                    Main.cloneArray(newSolution, solution);
+//                }
+//                // Solusi paling baik
+//                if (totalPenalty() <= bestPenalty) {
+//                    bestPenalty = totalPenalty();
+//                    Main.cloneArray(solution, newSolution);
+//                    long gdBestTime = System.nanoTime();
+//                }
+//
+//                decayrate = (waterLevel - desiredValue) / iteration;
+//                waterLevel = waterLevel - decayrate; // update waterlevel tiap iterasi
+//            }
+//
+//
+//            long endTime = System.nanoTime();
+//            long time = (endTime - startTime) / 1000000000;
+//            System.out.println("Pada iterasi ke- " + (i + 1) + " penalti : " + totalPenalty() + " waterlevelnya " + waterLevel);
+//            //Main.cloneArray(solution,newSolution);
+//            // Main.cloneArray(, solution);
+//        }
+//        System.out.println("Nilai penalti solusi awal : " + penalty);
+//    }
+public void greatDeluge()throws IOException {
+    int day = Main.plannedDay;
+    double bestPenalty=0;
+    double currPenalty= totalPenalty();
+    int [][] newSolution = new int [Main.employees.length][day];
+    Main.cloneArray(solution, newSolution);
+    double waterlevel = 0;
+    double decayrate = 0;
+    int iteration = 1000000;
+    double desiredValue = 0.1 * totalPenalty();
+
+    int p = 0;
+    double [][] plot = new double [100][4];
+//
+    for (int i = 0; i < 1000000; i++) {
+        int llh = (int) (Math.random() * 3);
+        if (llh == 0)
+            Main.exchangeTwo(solution);
+        if (llh == 1)
+            Main.exchangeThree(solution);
+        if (llh == 2)
+            Main.double2Exchange(solution);
+
+        if (Main.checkAllHc(solution) == 0) {
+           // System.out.println(totalPenalty());
+            if (totalPenalty() <= currPenalty) {
+                currPenalty = totalPenalty();
+                waterlevel = currPenalty;
+                Main.cloneArray(solution,newSolution);
+                if (currPenalty <= bestPenalty) {
+                    bestPenalty = currPenalty;
+                    Main.cloneArray(solution,newSolution);
                 }
+                if (totalPenalty() <= waterlevel){
+                    currPenalty = totalPenalty();
+                }
+                else {
+                    Main.cloneArray(newSolution, solution);
+                }
+            }
 
-
-                // Solusi lebih baik. untuk solusi lebih baik maka waterLevel sama dengan nilai solusi yang sekarang
-                 if (totalPenalty() < newPenalty){
-                     newPenalty = totalPenalty();
-                     waterLevel = newPenalty;
-                     Main.cloneArray(solution, newSolution); //copy solusinya
-                     }
-                 // Solusi lebih baik atau sama dengan
-                 else if (newPenalty <= waterLevel){
-                     newPenalty = totalPenalty() ;
-                     Main.cloneArray(solution, newSolution);
-                 }
-                 // Solusi lebih buruk, tidak diterima
-                 else {
-                     Main.cloneArray(newSolution, solution);
-                 }
-                 // Solusi paling baik
-                 if (newPenalty < theBest) {
-                     theBest = newPenalty;
-                     Main.cloneArray(bestSolution, newSolution);
-                     long gdBestTime = System.nanoTime();
-                 }
-                 //desired value
-                 desiredValue = 0.1 * totalPenalty();
-
-                 //skenariosasi 0.1, 0.3, 0.6, 0,9
-                 decayrate = (waterLevel-desiredValue)/iteration;
-                 waterLevel = waterLevel-decayrate; // update waterlevel tiap iterasi
-//                       }
-     }
-                long endTime = System.nanoTime();
-               // long time = (endTime-startTime)/ 1000000000 ;
-                Main.savingOptimizedSol(boxplot,a);
-                System.out.println("nilai terbaik " + theBest);
-                Main.cloneArray(bestSolution, solution);
         }
-    }
+        decayrate = (waterlevel - desiredValue)/iteration;
+        waterlevel = waterlevel - decayrate;
 
-    public void SAGD () throws IOException {
-        double desiredValue =0;
+        System.out.println("Iterasi ke- " + (i+1) +  " dengan nilai penalti : " + totalPenalty());
+//        if ((i+1)%10000 == 0){
+//            plot[p][0] = i+1;
+//            plot[p][1] = waterlevel;
+//            plot[p][2] = currPenalty;
+//            plot[p][3] = bestPenalty;
+//            p = p+1;
+//        }
+//    }
+ //   System.out.println(bestPenalty);
+//    for (int j = 0; j < plot.length; j++) {
+//        for (int k = 0; k < plot[j].length; k++) {
+//            System.out.print(plot[j][k] + " ");
+//        }
+//        System.out.println();
+    }
+}
+
+
+
+    public void SAGD() throws IOException {
+        double desiredValue = 0;
         double decayrate = 0;
         double waterLevel = 0;
+        int day = Main.plannedDay;
+        int[][] newSolution = new int[solution.length][day];
+        int[][] currentSolution = new int[solution.length][day];
+        int[][] bestSolution = new int[solution.length][day];
+        Main.cloneArray(solution, newSolution);
+        Main.cloneArray(solution, currentSolution);
+        Main.cloneArray(solution, bestSolution);
+        double penalty = totalPenalty();
+        long startTime = System.nanoTime();
 
-
+        for (int i = 0; i < 1000000; i++) {
+            int llh = (int) (Math.random() * 3);
+            switch (llh) {
+                case 0:
+                    Main.exchangeTwo(solution);
+                case 1:
+                    Main.exchangeThree(solution);
+                case 2:
+                    Main.double2Exchange(solution);
+            }
+        }
     }
 }
 
