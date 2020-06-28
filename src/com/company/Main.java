@@ -534,15 +534,15 @@ public class Main {
                                 } while (!checkHC6(matrix_solution));
                             }
                         } else
-                            System.out.println("hc 7 tidak feasible");
+                            System.out.println("Hard constraint 7 tidak feasible");
                     } else
-                        System.out.println("hc5 tidak feasible");
+                        System.out.println("Hard constraint 5 tidak feasible");
                 } else
-                    System.out.println("hc4 tidak feasible");
+                    System.out.println("Hard constraint 4 tidak feasible");
             } else
                 System.out.println("Hard constraint 3 tidak feasible");
         } else
-            System.out.println("hc 2 tidak feasible");
+            System.out.println("Hard constraint 2 tidak feasible");
 
 
         if (checkAllHc(matrix_solution) == 0) {
@@ -1213,7 +1213,7 @@ public static boolean checkHC7 (int [][] solution){
             while (cellIterator.hasNext()) {
                 Cell cell = cellIterator.next();
                 String cellValue = dataFormat.formatCellValue(cell);
-                 System.out.print(cellValue + "\n");
+                 //System.out.print(cellValue + "\n");
                 mendatar++;
             }
             if (mendatarfix < mendatar)
