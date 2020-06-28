@@ -704,7 +704,7 @@ public class Main {
     }
 // Menghitung jam kerja selama satu minggu
     public static double[] allWorkHour(int[][] solution, int week) {
-        double[] workhour_week = new double[15];
+        double[] workhour_week = new double[employees.length];
         for (int i = 0; i < employees.length; i++) {
             for (int j = week * 7; j < (week + 1) * 7; j++) {
                 if (solution[i][j] != 0) {
@@ -716,7 +716,7 @@ public class Main {
     }
 
     public static double[] averageWorkHour(int[][] solution, int week) {
-        double[] avg = new double[15];
+        double[] avg = new double[employees.length];
 
         for (int i = 0; i < week; i++) {
             for (int j = 0; j < employees.length; j++) {
@@ -1213,7 +1213,7 @@ public static boolean checkHC7 (int [][] solution){
             while (cellIterator.hasNext()) {
                 Cell cell = cellIterator.next();
                 String cellValue = dataFormat.formatCellValue(cell);
-                // System.out.print(cellValue + "\t");
+                 System.out.print(cellValue + "\n");
                 mendatar++;
             }
             if (mendatarfix < mendatar)
@@ -1235,6 +1235,7 @@ public static boolean checkHC7 (int [][] solution){
         }
 //        System.out.print(dataConstraint.length);
 //        System.out.println(mendatarfix);
+//        System.out.println(menurun);
         return dataConstraint;
     }
 

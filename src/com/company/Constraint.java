@@ -95,46 +95,56 @@ public class Constraint {
     }
 
     public void  setHc5_1()  {
-        String time = consValue[4] + ":00";
-        hc5_1 = LocalTime.parse(time);
+        if (consValue[4].length()==1)
+            hc5_1 = LocalTime.parse("0" + consValue[4] + ":00");
+        else hc5_1 = LocalTime.parse(consValue[4] + ":00");
+
     }
     public LocalTime getHc5_1() {
         return hc5_1;
     }
 
-    public void  setHc5_2()  {
-        String time = consValue[5] + ":00";
-        hc5_2 = LocalTime.parse(time);
+    public void  setHc5_2() {
+        if (consValue[5].length() == 1)
+            hc5_2 = LocalTime.parse("0" + consValue[5] + ":00");
+        else hc5_2 = LocalTime.parse(consValue[4] + ":00");
     }
+
     public LocalTime getHc5_2() {
         return hc5_2;
     }
 
     public void  setHc5_3()  {
-        String time = consValue[6] + ":00";
-        hc5_3 = LocalTime.parse(time);
+        if (consValue[6].length()==1)
+            hc5_3 = LocalTime.parse("0" + consValue[6] + ":00");
+        else hc5_3 = LocalTime.parse(consValue[6] + ":00");
     }
     public LocalTime getHc5_3() {
         return hc5_3;
     }
     public void  setHc5_4()  {
-        String time = consValue[7] + ":00";
-        hc5_4 = LocalTime.parse(time);
+        if (consValue[7].length()==1)
+            hc5_4 = LocalTime.parse("0" + consValue[7] + ":00");
+        else hc5_4 = LocalTime.parse(consValue[7] + ":00");
     }
     public LocalTime getHc5_4() {
         return hc5_4;
     }
 
     public void  setHc5_5()  {
-        String time = consValue[8] + ":00";
-        hc5_5 = LocalTime.parse(time);
+        if (consValue[8].length()==1)
+            hc5_5 = LocalTime.parse("0" + consValue[8] + ":00");
+        else hc5_5 = LocalTime.parse(consValue[8] + ":00");
+
     }
     public LocalTime getHc5_5() {
         return hc5_5;
     }
     public void  setHc5_6()  {
-        String time = consValue[9] + ":00";
-        hc5_6 = LocalTime.parse(time);
+        if (consValue[9].length()==1)
+            hc5_6 = LocalTime.parse("0" + consValue[9] + ":00");
+        else hc5_6 = LocalTime.parse(consValue[9] + ":00");
+
     }
     public LocalTime getHc5_6() {
         return hc5_6;
@@ -162,11 +172,6 @@ public class Constraint {
         else
             sc1_1 = Integer.parseInt(consValue[14]);
     }
-
-    public int getSc1_1() {
-        return sc1_1;
-    }
-
     public void setSc1_2() {
         if (consValue[15].equals("N/A"))
             sc1_2 = 0;
@@ -174,9 +179,7 @@ public class Constraint {
             sc1_2 = Integer.parseInt(consValue[15]);
     }
 
-    public int getSc1_2() {
-        return sc1_2;
-    }
+
 
     public void setSc1_3() {
         if (consValue[16].equals("N/A"))
@@ -185,9 +188,7 @@ public class Constraint {
             sc1_3 = Integer.parseInt(consValue[16]);
     }
 
-    public int getSc1_3() {
-        return sc1_3;
-    }
+
 
     public void setSc2() {
         if (consValue[17].equals("N/A"))
@@ -196,9 +197,7 @@ public class Constraint {
             sc2 = Integer.parseInt(consValue[17]);
     }
 
-    public int getSc2() {
-        return sc2;
-    }
+
 
     public void setSc3_1() {
         if (consValue[18].equals("N/A"))
@@ -207,9 +206,7 @@ public class Constraint {
             sc3_1 = Integer.parseInt(consValue[18]);
     }
 
-    public int getSc3_1() {
-        return sc3_1;
-    }
+
 
     public void setSc3_2() {
         if (consValue[19].equals("N/A"))
@@ -218,9 +215,7 @@ public class Constraint {
             sc3_2 = Integer.parseInt(consValue[19]);
     }
 
-    public int getSc3_2() {
-        return sc3_2;
-    }
+
 
     public void setSc3_3() {
         if (consValue[20].equals("N/A"))
@@ -229,9 +224,7 @@ public class Constraint {
             sc3_3 = Integer.parseInt(consValue[20]);
     }
 
-    public int getSc3_3() {
-        return sc3_3;
-    }
+
 
     public void setSc4() {
         if (consValue[21].equals("N/A"))
@@ -240,9 +233,7 @@ public class Constraint {
             sc4 = Integer.parseInt(consValue[21]);
     }
 
-    public int getSc4() {
-        return sc4;
-    }
+
 
     public void setSc5_1Max() {
         if (consValue[22].equals("N/A"))
@@ -251,9 +242,7 @@ public class Constraint {
             sc5_1Max = Integer.parseInt(consValue[22].substring(0,1));
     }
 
-    public int getSc5_1Max() {
-        return sc5_1Max;
-    }
+
 
     public void setSc5_1Min() {
         if (consValue[22].equals("N/A"))
@@ -262,9 +251,7 @@ public class Constraint {
             sc5_1Min = Integer.parseInt(consValue[22].substring(2,3));
     }
 
-    public int getSc5_1Min() {
-        return sc5_1Min;
-    }
+
 
     public void setSc5_2Max() {
         if (consValue[23].equals("N/A"))
@@ -273,9 +260,7 @@ public class Constraint {
             sc5_2Max = Integer.parseInt(consValue[23].substring(0,1));
     }
 
-    public int getSc5_2Max() {
-        return sc5_2Max;
-    }
+
 
     public void setSc5_2Min() {
         if (consValue[23].equals("N/A"))
@@ -284,9 +269,7 @@ public class Constraint {
             sc5_2Min = Integer.parseInt(consValue[23].substring(2,3));
     }
 
-    public int getSc5_2Min() {
-        return sc5_2Min;
-    }
+
 
     public void setSc5_3Max() {
         if (consValue[24].equals("N/A"))
@@ -295,9 +278,7 @@ public class Constraint {
             sc5_3Max = Integer.parseInt(consValue[24].substring(0,1));
     }
 
-    public int getSc5_3Max() {
-        return sc5_3Max;
-    }
+
 
     public void setSc5_3Min() {
         if (consValue[24].equals("N/A"))
@@ -306,9 +287,7 @@ public class Constraint {
             sc5_3Min = Integer.parseInt(consValue[24].substring(2,3));
     }
 
-    public int getSc5_3Min() {
-        return sc5_3Min;
-    }
+
 
     public void setSc6(){
         if(consValue[25].equals("N/A"))
@@ -316,20 +295,13 @@ public class Constraint {
         if (consValue[25].equals("Yes"))
             sc6 = true;
     }
-
-    public boolean getSc6() {
-        return sc6;
-    }
-
     public void setSc7(){
         if(consValue[26].equals("N/A"))
             sc7 = false;
         if (consValue[26].equals("Yes"))
             sc7 = true;
     }
-    public boolean getSc7() {
-        return sc7;
-    }
+
 
     public void setSc8(){
         if(consValue[27].equals("N/A"))
@@ -338,19 +310,62 @@ public class Constraint {
             sc8 = Integer.parseInt(consValue[27]);
     }
 
-    public int getSc8() {
-        return sc8;
-    }
-
     public void setSc9(){
         if(consValue[28].equals("N/A"))
             sc9 = 0;
         else
             sc9 = Integer.parseInt(consValue[28]);
     }
-
-    public int getSc9() {
-        return sc9;
+    public int getSc1_2() {
+        return sc1_2;
+    }
+    public int getSc1_3() {
+        return sc1_3;
+    }
+    public int getSc2() {
+        return sc2;
+    }
+    public int getSc3_1() {
+        return sc3_1;
+    }
+    public int getSc3_2() {
+        return sc3_2;
+    }
+    public int getSc3_3() {
+        return sc3_3;
+    }
+    public int getSc4() {
+        return sc4;
+    }
+    public int getSc5_1Max() {
+        return sc5_1Max;
+    }
+    public int getSc5_1Min() {
+        return sc5_1Min;
+    }
+    public int getSc5_2Max() {
+        return sc5_2Max;
+    }
+    public int getSc5_2Min() {
+        return sc5_2Min;
+    }
+    public int getSc1_1() { return sc1_1;    }
+    public int getSc5_3Max() {
+        return sc5_3Max;
+    }
+    public int getSc5_3Min() {
+        return sc5_3Min;
+    }
+    public boolean getSc6() {
+        return sc6;
+    }
+    public boolean getSc7() {
+        return sc7;
+    }
+    public int getSc8() {
+        return sc8;
+    }
+    public int getSc9() {return sc9;
     }
 }
 
