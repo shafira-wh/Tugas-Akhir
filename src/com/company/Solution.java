@@ -410,12 +410,6 @@ public class Solution {
         System.out.println("Solusi awalnya adalah : " + initSolPenalty);
         System.out.println("Nilai solusi terbaiknya : " + bestPenalty);
         Main.print(newSolution);
-//        for (int j = 0; j < plot.length; j++) {
-//            for (int k = 0; k < plot[j].length; k++) {
-//                System.out.print(plot[j][k] + " ");
-//            }
-//            System.out.println();
-//        }
     }
 
     public void hillClimbing () throws IOException {
