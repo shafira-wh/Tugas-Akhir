@@ -48,7 +48,7 @@ public class Main {
         selectedProcess = input.nextInt();
 
         for (int i = 0; i < 7; i++) {
-            System.out.println((i + 1) + ". OptTur" + (i + 1));
+            System.out.println((i + 1) + ". OpTur" + (i + 1));
         }
 
         System.out.println("Pilih file :");
@@ -579,6 +579,7 @@ public class Main {
             } index++;
         }
         Solution solution = new Solution(matrix_solution);
+//        solution.hillClimbing();
         solution.greatDeluge();
        // System.out.println(solution.totalPenalty());
     }
@@ -590,7 +591,6 @@ public class Main {
             }
         }
     }
-
     public static void print(int[][] printAll) {
         for (int i = 0; i < printAll.length; i++) {
             for (int j = 0; j < printAll[i].length; j++) {

@@ -346,18 +346,19 @@ public class Solution {
     public void greatDeluge() {
         int day = Main.plannedDay;
         int[][] newSolution = new int[Main.employees.length][day];
-        int [][] bestSolution = new int [Main.employees.length][day];
+        int[][] bestSolution = new int[Main.employees.length][day];
         Main.cloneArray(solution, newSolution);
         double initSolPenalty = totalPenalty();
         double waterLevel = totalPenalty();
-        int iteration = 1000;
-        double penalty;
+        int iteration = 1000000;
         double bestPenalty;
         double currPenalty;
-        penalty = bestPenalty = totalPenalty();
-        double alpha = 0.1;
+        currPenalty = bestPenalty = totalPenalty();
+        double alpha = 0.5;
         double desiredValue = alpha * totalPenalty();
         double decayrate = (waterLevel - desiredValue) / iteration;
+        int p = 0;
+        double[][] plot = new double[100][4];
 
         for (int i = 0; i < iteration; i++) {
             int llh = (int) (Math.random() * 3);
@@ -367,35 +368,109 @@ public class Solution {
                 Main.exchangeThree(solution);
             if (llh == 2)
                 Main.double2Exchange(solution);
-             currPenalty = totalPenalty();
+           // currPenalty = totalPenalty();
+
             if (Main.checkAllHc(solution) == 0) {
-                if (currPenalty <= penalty) {
-                    penalty = currPenalty;
-                  //  waterLevel = totalPenalty();
+                if (totalPenalty() <= currPenalty) {
+                    currPenalty = totalPenalty();
+                    waterLevel = currPenalty;
                     Main.cloneArray(solution, newSolution);
-                }
-                else if ( currPenalty <= waterLevel){
-//                if (currPenalty <= waterLevel) {
-                    penalty = currPenalty;
-//                    penalty = totalPenalty();
-                    Main.cloneArray(solution, newSolution);
-                }
-                else {
-                    Main.cloneArray(newSolution, solution);
-                }
-                if (currPenalty < bestPenalty){
-                    bestPenalty = currPenalty;
-                    Main.cloneArray(solution,bestSolution);
-                }
+                    if (currPenalty <= bestPenalty) {
+                        bestPenalty = currPenalty;
+                        waterLevel = bestPenalty;
+                        Main.cloneArray(solution, newSolution);
+                    } else {
+                        Main.cloneArray(newSolution, solution);
+                    }
+                    if (totalPenalty() <= waterLevel) {
+                        // System.out.println("Solusi lebih buruk diterima");
+                        currPenalty = totalPenalty();
+                        waterLevel = currPenalty;
+                        Main.cloneArray(solution, newSolution);
+                    } else {
+                        Main.cloneArray(newSolution, solution);
+                    }
+                }  } else {
+                Main.cloneArray(newSolution, solution);
             }
             waterLevel = waterLevel - decayrate;
-           // System.out.println("Iterasi ke - " + (i + 1) + " penaltinya " + currPenalty);
+            // System.out.println("Iterasi ke - " + (i + 1) + " penaltinya " + currPenalty);
             System.out.println("Iterasi ke - " + (i + 1) + " penaltinya " + totalPenalty() + " dengan waterlevel " + waterLevel);
+
+
+            if ((i + 1) % 10000 == 0) {
+                plot[p][0] = i + 1;
+                plot[p][1] = waterLevel;
+                plot[p][2] = currPenalty;
+                plot[p][3] = bestPenalty;
+                p = p + 1;
+            }
         }
-    System.out.println("Solusi awalnya adalah : " + initSolPenalty);
+
+        System.out.println("Solusi awalnya adalah : " + initSolPenalty);
+        System.out.println("Nilai solusi terbaiknya : " + bestPenalty);
+        Main.print(newSolution);
+//        for (int j = 0; j < plot.length; j++) {
+//            for (int k = 0; k < plot[j].length; k++) {
+//                System.out.print(plot[j][k] + " ");
+//            }
+//            System.out.println();
+//        }
     }
 
-//
+    public void hillClimbing () throws IOException {
+        for (int e = 0; e < 9; e++) {
+            int day = Main.plannedDay;
+            int[][] newSolution = new int[solution.length][day];
+            int [][] baseSolution = new int [solution.length][day];
+            double penalty = totalPenalty();
+            Main.cloneArray(solution, newSolution);
+            Main.cloneArray(solution, newSolution);
+            double[][] plot = new double[101][2];
+            int p = 0;
+            long startTime = System.nanoTime();
+            for (int i = 0; i < 1000000; i++) {
+                int llh = (int) (Math.random() * 3);
+                switch (llh) {
+                    case 0:
+                        Main.exchangeTwo(solution);
+                    case 1:
+                        Main.exchangeThree(solution);
+                    case 2:
+                        Main.double2Exchange(solution);
+                }
+                if (Main.checkAllHc(solution) == 0) {
+                    if (totalPenalty() <= penalty) {
+                        penalty = totalPenalty();
+                        Main.cloneArray(solution, newSolution);
+                    } else {
+                        Main.cloneArray(newSolution, solution);
+                    }
+                } else {
+                    Main.cloneArray(newSolution, solution);
+                }
+                System.out.println("iterasi ke " + (i + 1) + " penalti : " + totalPenalty());
+                if ((i + 1) % 10000 == 0) {
+                    plot[p][0] = i + 1;
+                    plot[p][1] = penalty;
+                    p = p + 1;
+                }
+            }
+
+            long endTime = System.nanoTime();
+            long time = (endTime-startTime) / 1000000000;
+            plot [100][0] = time;
+            Main.savingOptimizedSol(plot,e);
+            System.out.println("best penalty dari solusi  " + penalty);
+            Main.cloneArray(baseSolution,solution);
+//            for (int j = 0; j < plot.length; j++) {
+//                for (int k = 1; k < plot[j].length; k++) {
+//                    System.out.print(plot[j][k] + " ");
+//                }
+//                System.out.println();
+//            }
         }
+    }
+}
 
 
