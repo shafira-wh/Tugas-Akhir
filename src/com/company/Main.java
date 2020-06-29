@@ -557,7 +557,6 @@ public class Main {
                 savingSolution(matrix_solution, selectedFile);
                 savingShiftSol(matrix_solution,selectedFile);
             }
-
         }
         else {
             System.out.println("HC" + checkAllHc(matrix_solution)+ " tidak feasible");
@@ -579,8 +578,8 @@ public class Main {
             } index++;
         }
         Solution solution = new Solution(matrix_solution);
-//        solution.hillClimbing();
-        solution.greatDeluge();
+        solution.hillClimbing();
+//        solution.greatDeluge1();
        // System.out.println(solution.totalPenalty());
     }
 
@@ -1055,8 +1054,8 @@ public static boolean checkHC7 (int [][] solution){
         savedShiftSol.close();
     }
     // Menyimpan optimasi ke .txt
-    public static void savingOptimizedSol (double [][] solution, int number) throws IOException {
-        FileWriter savedOptSol = new FileWriter("D:\\Kuliah!\\Semester 8\\TA\\Solution\\Optimasi  OpTur" + selectedFile + ".txt", false);
+    public static void savingOptimizedSol (int [][] solution, int number) throws IOException {
+        FileWriter savedOptSol = new FileWriter("D:\\Kuliah!\\Semester 8\\TA\\Optimized\\Optimasi HC OpTur" + selectedFile + ".txt", false);
         for (int i=0; i <solution.length; i++){
             for (int j=0; j<solution[i].length;j++){
                 savedOptSol.write(solution[i][j] + " ");
