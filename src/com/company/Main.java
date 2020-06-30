@@ -579,7 +579,8 @@ public class Main {
         }
         Solution solution = new Solution(matrix_solution);
         solution.hillClimbing();
-//        solution.greatDeluge1();
+//        solution.greatDeluge();
+
        // System.out.println(solution.totalPenalty());
     }
 

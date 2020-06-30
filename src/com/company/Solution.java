@@ -347,23 +347,22 @@ public class Solution {
 //        }
     }
 
-
-
     // GREAT DELUGE
-    public void greatDeluge() {
+    public void greatDeluge () throws IOException {
         int day = Main.plannedDay;
+        long startTime = System.nanoTime();
         int[][] newSolution = new int[Main.employees.length][day];
         int[][] bestSolution = new int[Main.employees.length][day];
         Main.cloneArray(solution, newSolution);
         double initSolPenalty = totalPenalty();
         double waterLevel = totalPenalty();
-        int iteration = 1000000;
+        int iteration = 10000;
         double bestPenalty;
         double currPenalty;
         currPenalty = bestPenalty = totalPenalty();
-        double alpha = 0.5;
-        double desiredValue = alpha * totalPenalty();
-        double decayrate = (waterLevel - desiredValue) / iteration;
+        double alpha = 0.1;
+        double desiredValue = 0;
+        double decayRate = 0;
         int p = 0;
         double[][] plot = new double[100][4];
 
@@ -375,49 +374,70 @@ public class Solution {
                 Main.exchangeThree(solution);
             if (llh == 2)
                 Main.double2Exchange(solution);
-           // currPenalty = totalPenalty();
+            // currPenalty = totalPenalty();
 
             if (Main.checkAllHc(solution) == 0) {
+                desiredValue = alpha * totalPenalty();
+                decayRate = (waterLevel - desiredValue) / iteration;
                 if (totalPenalty() <= currPenalty) {
                     currPenalty = totalPenalty();
                     waterLevel = currPenalty;
                     Main.cloneArray(solution, newSolution);
-                    if (currPenalty <= bestPenalty) {
-                        bestPenalty = currPenalty;
-                        waterLevel = bestPenalty;
-                        Main.cloneArray(solution, newSolution);
-                    } else {
-                        Main.cloneArray(newSolution, solution);
-                    }
+                } else {
                     if (totalPenalty() <= waterLevel) {
-                        // System.out.println("Solusi lebih buruk diterima");
                         currPenalty = totalPenalty();
-                        waterLevel = currPenalty;
                         Main.cloneArray(solution, newSolution);
-                    } else {
-                        Main.cloneArray(newSolution, solution);
-                    }
-                }  } else {
-                Main.cloneArray(newSolution, solution);
+                    } else Main.cloneArray(newSolution, solution);
+                }
+                waterLevel = waterLevel - decayRate;
+                }
+            else Main.cloneArray(newSolution, solution);
+            if ((i+1)%100 == 0) {
+            System.out.println("GD - Iterasi ke - " + (i + 1) + " penaltinya " + totalPenalty() + " dengan waterlevel " + waterLevel);
+
             }
-            waterLevel = waterLevel - decayrate;
-            // System.out.println("Iterasi ke - " + (i + 1) + " penaltinya " + currPenalty);
-            System.out.println("Iterasi ke - " + (i + 1) + " penaltinya " + totalPenalty() + " dengan waterlevel " + waterLevel);
+    }
+            System.out.println("penaltinya " + totalPenalty());
+            System.out.println("Nilai solusi awalnya : " + initSolPenalty);
+//                    for (int j = 0; j < plot.length; j++) {
+//                        for (int k = 0; k < plot[j].length; k++) {
+//                            System.out.print(plot[j][k] + " ");
+//                        }
+//                        System.out.println();
+//                    }
 
+            Main.print(newSolution);
+            long endTime = System.nanoTime();
+            long time = (endTime - startTime) / 1000000000;
+            //plot [100][0] = time;
 
-            if ((i + 1) % 10000 == 0) {
-                plot[p][0] = i + 1;
-                plot[p][1] = waterLevel;
-                plot[p][2] = currPenalty;
-                plot[p][3] = bestPenalty;
-                p = p + 1;
+            Main.print(newSolution);
+            System.out.println(totalPenalty());
+            DecimalFormat df = new DecimalFormat("#.###");
+            String wkt = df.format(time);
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
+            String kapan = dateFormat.format(date);
+            String finalPenalty = df.format(totalPenalty());
+            String info = String.valueOf(iteration);
+
+            if (Main.checkAllHc(solution) == 0) {
+                System.out.println("Simpan solusi optimasi dengan Great Deluge?");
+                System.out.println("1. Simpan");
+                System.out.println("2. Batal");
+                Scanner save = new Scanner(System.in);
+                int choice = save.nextInt();
+                if (choice == 1) {
+                    Main.savingOptimizedSol(solution, Main.selectedFile);
+                    //}
+                } else
+                    System.out.println("Penyimpanan dibatalkan ");
+
             }
         }
 
-        System.out.println("Solusi awalnya adalah : " + initSolPenalty);
-        System.out.println("Nilai solusi terbaiknya : " + bestPenalty);
-        Main.print(newSolution);
-    }
+
+
 
     public void hillClimbing () throws IOException {
             int day = Main.plannedDay;
@@ -451,32 +471,23 @@ public class Solution {
                         Main.cloneArray(newSolution, solution);
                     }
                 }
-                System.out.println("HC - iterasi ke " + (i + 1) + " nilai penalti : " + initSolPenalty);
 
-//                if(i%20000==19999) {
-                if (i % 2 == 1) {
-                    System.out.println("Iterasi ke " + (i + 1));
-                    plot[p][0] = (i + 1);
-                    plot[p][1] = totalPenalty();
-                    p++;
-                }
+                if ((i+1)%5000 == 0)
+                System.out.println((i + 1) + " " + initSolPenalty);
 
             }
             long endTime = System.nanoTime();
-            long time = (endTime-startTime) / 1000000000;
+            double time_second = (endTime-startTime)/1000000000;
             //plot [100][0] = time;
 
-            Main.print(newSolution);
+          //  Main.print(newSolution);
             System.out.println(totalPenalty());
             DecimalFormat df = new DecimalFormat("#.###");
-            String wkt = df.format(time);
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+           DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Date date = new Date();
-            String kapan = dateFormat.format(date);
-            String finalPenalty = df.format(totalPenalty());
-            String info = String.valueOf(iteration);
 
             if(Main.checkAllHc(solution)==0) {
+                System.out.println("Waktu yang diperlukan adalah " + time_second + " seconds");
                 System.out.println("Simpan solusi optimasi dengan Hill Climbing?");
                 System.out.println("1. Simpan");
                 System.out.println("2. Batal");
@@ -484,21 +495,11 @@ public class Solution {
                 int choice = save.nextInt();
                 if (choice == 1) {
                     Main.savingOptimizedSol(solution, Main.selectedFile);
-
                     //}
                 } else
-                    System.out.println("Solusi tidak feasible");
-
-
-    }
-//            for (int j = 0; j < plot.length; j++) {
-//                for (int k = 1; k < plot[j].length; k++) {
-//                    System.out.print(plot[j][k] + " ");
-//                }
-//                System.out.println();
-//            }
+                    System.out.println("Penyimpanan dibatalkan");
+            }
         }
-
 
 
 //    public void selfAdaptive () throws IOException{
@@ -537,92 +538,16 @@ public class Solution {
 //                    if (llh == 2)
 //                        Main.double2Exchange(solution);
 //                                       }
+//                if (Main.checkAllHc(solution) == 0{
+//
+//                }
 //                }
 //
 //            }
 //        }
 
-    public void greatDeluge1() {
-        int day = Main.plannedDay;
-        int[][] newSolution = new int[Main.employees.length][day];
-        int[][] bestSolution = new int[Main.employees.length][day];
-        Main.cloneArray(solution, newSolution);
-        double initSolPenalty = totalPenalty();
-        double waterLevel = totalPenalty();
-        int iteration = 1000000;
-        double bestPenalty;
-        double currPenalty;
-        currPenalty = bestPenalty = totalPenalty();
-        double alpha = 0.5;
-        double desiredValue = 0;
-        double decayRate = 0;
-        int p = 0;
-        double[][] plot = new double[100][4];
-
-        for (int i = 0; i < iteration; i++) {
-            int llh = (int) (Math.random() * 3);
-            if (llh == 0)
-                Main.exchangeTwo(solution);
-            if (llh == 1)
-                Main.exchangeThree(solution);
-            if (llh == 2)
-                Main.double2Exchange(solution);
-            // currPenalty = totalPenalty();
-
-            if (Main.checkAllHc(solution) == 0) {
-                desiredValue = alpha * totalPenalty();
-                decayRate = (waterLevel - desiredValue) / iteration;
-                if (totalPenalty() <= currPenalty) {
-                    currPenalty = totalPenalty();
-                    waterLevel = currPenalty;
-                    Main.cloneArray(solution, newSolution);
-                    if (currPenalty <= bestPenalty) {
-                        bestPenalty = currPenalty;
-                        waterLevel = bestPenalty;
-                        Main.cloneArray(solution, bestSolution);
-                        Main.cloneArray(solution, newSolution);
-                    } else {
-                        if (totalPenalty() <= waterLevel) {
-                            // System.out.println("Solusi lebih buruk diterima");
-                            currPenalty = totalPenalty();
-                            waterLevel = currPenalty;
-                            Main.cloneArray(solution, newSolution);
-                        } else {
-                            Main.cloneArray(newSolution, solution);
-                        }
-                    }
-                } else {
-                    if (totalPenalty() <= waterLevel) {
-                        // System.out.println("Solusi lebih buruk diterima");
-                        currPenalty = totalPenalty();
-                        waterLevel = currPenalty;
-                        Main.cloneArray(solution, newSolution);
-                    } else {
-                        Main.cloneArray(newSolution, solution);
-                    }
-                }
-            } else {
-                Main.cloneArray(newSolution, solution);
-            }
-            waterLevel = waterLevel - decayRate;
-            // System.out.println("Iterasi ke - " + (i + 1) + " penaltinya " + currPenalty);
-            System.out.println("Iterasi ke - " + (i + 1) + " penaltinya " + totalPenalty() + " dengan waterlevel " + waterLevel);
-
-
-            if ((i + 1) % 10000 == 0) {
-                plot[p][0] = i + 1;
-                plot[p][1] = waterLevel;
-                plot[p][2] = currPenalty;
-                plot[p][3] = bestPenalty;
-                p = p + 1;
-            }
-        }
-
-        System.out.println("Solusi awalnya adalah : " + initSolPenalty);
-        System.out.println("Nilai solusi terbaiknya : " + bestPenalty);
-        Main.print(newSolution);
     }
-        }
+
 
 
 
