@@ -8,6 +8,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -318,19 +319,109 @@ public class Solution {
         }
         return penaltySc9;
     }
-
-    public void SAGD() throws IOException {
-        double desiredValue = 0;
-        double decayrate = 0;
-        double waterLevel = 0;
+    public void SAGD () {
         int day = Main.plannedDay;
-        int[][] newSolution = new int[solution.length][day];
-        int[][] currentSolution = new int[solution.length][day];
-        int[][] bestSolution = new int[solution.length][day];
+        int[][] newSolution = new int[Main.employees.length][day];
+        Main.cloneArray(solution,newSolution);
+        int iterasi = 100000;
+        long startTime = System.nanoTime();
+        double bestPenalty; double currPenalty;
+        bestPenalty = currPenalty = totalPenalty();
+        double waterLevel = totalPenalty();
+        double alpha = 0.01;
+        double desiredValue = alpha * totalPenalty();
+
         Main.cloneArray(solution, newSolution);
-        Main.cloneArray(solution, currentSolution);
-        Main.cloneArray(solution, bestSolution);
-        double penalty = totalPenalty();
+        LinkedList<Integer> LH = new LinkedList<Integer>();
+        LH.add((int)(Math.random()*3));
+        LH.add((int)(Math.random()*3));
+        LH.add((int)(Math.random()*3));
+        LinkedList<Integer> WH = new LinkedList<Integer>();
+        for(int i=0; i<1000000; i++)
+        {
+            int llh = -1;
+            while(llh==-1) {
+                if (!LH.isEmpty())
+                    llh = LH.pollFirst();
+                else {
+                    if(!WH.isEmpty())
+                    {
+                        LH.add(WH.get((int)(Math.random()*WH.size())));
+                        LH.add(WH.get((int)(Math.random()*WH.size())));
+                        LH.add((int)(Math.random()*3));
+                    }
+                    else
+                    {
+                        LH.add((int)(Math.random()*3));
+                        LH.add((int)(Math.random()*3));
+                        LH.add((int)(Math.random()*3));
+                    }
+                }
+            }
+            if (llh == 0)
+                Main.exchangeTwo(solution);
+            if (llh == 1)
+                Main.exchangeThree(solution);
+            if (llh == 2)
+                Main.double2Exchange(solution);
+            double decayrate = (waterLevel - desiredValue) / iterasi;
+            if(Main.checkAllHc(solution)==0){
+              //  System.out.println("diterima");
+                if(totalPenalty()<=currPenalty) {
+                    currPenalty = totalPenalty();
+                    Main.cloneArray(solution, newSolution);
+//                    waterLevel = totalPenalty();
+                    WH.add(llh);
+                    if (currPenalty <= bestPenalty) {
+                        bestPenalty = currPenalty;
+                        Main.cloneArray(solution, newSolution);
+                        WH.add(llh);
+                    } else {
+                        Main.cloneArray(newSolution, solution);
+                    }
+                }
+                else {
+                    if (totalPenalty() <= waterLevel){
+//                        System.out.println("yang lebih buruk diterima");
+                        currPenalty = totalPenalty();
+                        Main.cloneArray(solution,newSolution);
+                    }
+                    else {
+                        Main.cloneArray(newSolution,solution);
+                    }
+                }
+            }
+                else {
+                    Main.cloneArray(newSolution, solution);
+
+                }
+                waterLevel = waterLevel - decayrate;
+            if ((i+1)%5000 == 0)
+            System.out.println("Iterasi " +  (i+1) +   " penalti " +totalPenalty() +  " waterlevel "  + waterLevel);
+           }
+        long endTime = System.nanoTime();
+        double time_second = (endTime-startTime)/1000000000;
+        System.out.println("report penlati dan waktu ");
+        System.out.println(totalPenalty() + " " + time_second);
+
+
+    }
+
+    public void SAGD1() throws IOException {
+        int day = Main.plannedDay;
+         int[][] newSolution = new int[Main.employees.length][day];
+        int[][] bestSolution = new int[Main.employees.length][day];
+        Main.cloneArray(solution, newSolution);
+        double initSolPenalty = totalPenalty();
+        double waterLevel = totalPenalty();
+        int iteration = 1000000;
+        int LLH_apply = 0;
+        int batas_llh = 3;
+        int batas_wh = batas_llh;
+        int LH []  = new int [batas_llh];
+        int Wh [] = new int [batas_wh];
+
+
         long startTime = System.nanoTime();
         String selectedLLH = null;
 
@@ -356,15 +447,16 @@ public class Solution {
         Main.cloneArray(solution, newSolution);
         double initSolPenalty = totalPenalty();
         double waterLevel = totalPenalty();
-        int iteration = 10000;
+        int iteration = 1000000;
         double bestPenalty;
         double currPenalty;
         currPenalty = bestPenalty = totalPenalty();
-        double alpha = 0.1;
+        //PERHATIKAN NILAI ALPHA - SKENARIOSASI -  0.5 0.7 0.9
+        double alpha = 0.5;
         double desiredValue = 0;
         double decayRate = 0;
-        int p = 0;
-        double[][] plot = new double[100][4];
+//        int p = 0;
+//        double[][] plot = new double[100][4];
 
         for (int i = 0; i < iteration; i++) {
             int llh = (int) (Math.random() * 3);
@@ -386,57 +478,112 @@ public class Solution {
                 } else {
                     if (totalPenalty() <= waterLevel) {
                         currPenalty = totalPenalty();
+                        waterLevel = totalPenalty();
                         Main.cloneArray(solution, newSolution);
+
                     } else Main.cloneArray(newSolution, solution);
                 }
                 waterLevel = waterLevel - decayRate;
                 }
             else Main.cloneArray(newSolution, solution);
-            if ((i+1)%100 == 0) {
-            System.out.println("GD - Iterasi ke - " + (i + 1) + " penaltinya " + totalPenalty() + " dengan waterlevel " + waterLevel);
+            if ((i+1)%5000 == 0) {
+            System.out.println(totalPenalty() + " " + waterLevel);
 
             }
     }
-            System.out.println("penaltinya " + totalPenalty());
-            System.out.println("Nilai solusi awalnya : " + initSolPenalty);
-//                    for (int j = 0; j < plot.length; j++) {
-//                        for (int k = 0; k < plot[j].length; k++) {
-//                            System.out.print(plot[j][k] + " ");
-//                        }
-//                        System.out.println();
-//                    }
+        long endTime = System.nanoTime();
+        double time_second = (endTime-startTime)/1000000000;
+        //plot [100][0] = time;
 
-            Main.print(newSolution);
-            long endTime = System.nanoTime();
-            long time = (endTime - startTime) / 1000000000;
-            //plot [100][0] = time;
+        //  Main.print(newSolution);
+        System.out.println("report");
+        System.out.println(totalPenalty() + " " + time_second);
+//        DecimalFormat df = new DecimalFormat("#.###");
+//        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+//        Date date = new Date();
 
-            Main.print(newSolution);
-            System.out.println(totalPenalty());
-            DecimalFormat df = new DecimalFormat("#.###");
-            String wkt = df.format(time);
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-            Date date = new Date();
-            String kapan = dateFormat.format(date);
-            String finalPenalty = df.format(totalPenalty());
-            String info = String.valueOf(iteration);
+//        if(Main.checkAllHc(solution)==0) {
+            System.out.println("Waktu yang diperlukan adalah " + time_second + " seconds");
+//            System.out.println("Simpan solusi optimasi dengan Great Deluge?");
+//            System.out.println("1. Simpan");
+//            System.out.println("2. Batal");
+//            Scanner save = new Scanner(System.in);
+//            int choice = save.nextInt();
+//            if (choice == 1) {
+//                Main.savingOptimizedSol(solution, Main.selectedFile);
+//                //}
+//            } else
+//                System.out.println("Penyimpanan dibatalkan");
+//        }
+    }
 
+    //GD Dimas Bener di waterLevel
+    public void GD() {
+        int day = Main.plannedDay;
+        int [][] newSolution = new int [Main.employees.length][day];
+       Main.cloneArray(solution,newSolution);
+        double bestPenalty; double currPenalty;
+        bestPenalty = currPenalty = totalPenalty();
+        double waterLevel = totalPenalty();
+        int iteration = 1000000;
+        double alpha = 0.1;
+        double desireValue = alpha * totalPenalty();
+        double decayRate = (waterLevel - desireValue) / 1000000;
+        int p = 0;
+        double [][] plot = new double [100][4];
+//
+        for (int i = 0; i < iteration; i++) {
+            int llh = (int) (Math.random() * 3);
+            if (llh == 0)
+                Main.exchangeTwo(solution);
+            if (llh == 1)
+                Main.exchangeThree(solution);
+            if (llh == 2)
+                Main.double2Exchange(solution);
+//               currPenalty = totalPenalty();
             if (Main.checkAllHc(solution) == 0) {
-                System.out.println("Simpan solusi optimasi dengan Great Deluge?");
-                System.out.println("1. Simpan");
-                System.out.println("2. Batal");
-                Scanner save = new Scanner(System.in);
-                int choice = save.nextInt();
-                if (choice == 1) {
-                    Main.savingOptimizedSol(solution, Main.selectedFile);
-                    //}
-                } else
-                    System.out.println("Penyimpanan dibatalkan ");
+//                System.out.println("feasible");
+                if (totalPenalty() <= currPenalty) {
+                    currPenalty = totalPenalty();
+                    Main.cloneArray(solution,newSolution);
+                   if (currPenalty <= bestPenalty) {
+                        bestPenalty = currPenalty;
+                        Main.cloneArray(solution,newSolution);
 
+                    } else {
+                       Main.cloneArray(newSolution, solution);
+                    }
+                } else {
+                    if (totalPenalty() <= waterLevel) {
+//                        System.out.println("solusi jelek diterima");
+                        currPenalty = totalPenalty();
+                        Main.cloneArray(solution,newSolution);
+                    } else {
+                        Main.cloneArray(newSolution, solution);
+                    }
+                }
+            } else {
+                Main.cloneArray(newSolution, solution);
+            }
+            waterLevel = waterLevel - decayRate;
+            if ((i+1)%5000 == 0)
+            System.out.println("Iterasi : " + (i+1) + /**" suhu : " + TAwal + " diff : " + diff + " d : " + d + " prob : " + prob + **/ " penalti : " + totalPenalty() + " " + waterLevel);
+            if ((i+1)%10000 == 0){
+                plot[p][0] = i+1;
+                plot[p][1] = waterLevel;
+                plot[p][2] = currPenalty;
+                plot[p][3] = bestPenalty;
+                p = p+1;
             }
         }
-
-
+        System.out.println(bestPenalty);
+        for (int j = 0; j < plot.length; j++) {
+            for (int k = 0; k < plot[j].length; k++) {
+                System.out.print(plot[j][k] + " ");
+            }
+            System.out.println();
+        }
+    }
 
 
     public void hillClimbing () throws IOException {
